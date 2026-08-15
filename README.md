@@ -14,6 +14,7 @@ The current implementation provides:
 - Gemini-powered structured semantic evidence analysis
 - Deterministic evidence quote and page verification
 - Deterministic rubric scoring
+- End-to-end in-memory resume matching pipeline
 
 The public resume-analysis API endpoint is not implemented yet.
 
