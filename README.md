@@ -13,9 +13,9 @@ The current implementation provides:
 - Safe text extraction from supported resume PDFs
 - Gemini-powered structured semantic evidence analysis
 - Deterministic evidence quote and page verification
+- Deterministic rubric scoring
 
-Deterministic scoring and the public resume-analysis API endpoint are not
-implemented yet.
+The public resume-analysis API endpoint is not implemented yet.
 
 ## PDF support
 
@@ -24,8 +24,7 @@ implemented yet.
 - Maximum length: 10 pages
 - OCR is not supported yet
 
-Deterministic evidence verification, score calculation, and a public
-resume-analysis API endpoint are not implemented yet.
+The public resume-analysis API endpoint is not implemented yet.
 
 ## Requirements
 
