@@ -16,7 +16,7 @@ The current implementation provides:
 - Deterministic rubric scoring
 - End-to-end in-memory resume matching pipeline
 
-The public resume-analysis API endpoint is not implemented yet.
+Comprehensive API error mapping and production hardening are not implemented yet.
 
 ## PDF support
 
@@ -24,8 +24,6 @@ The public resume-analysis API endpoint is not implemented yet.
 - Maximum file size: 10 MiB
 - Maximum length: 10 pages
 - OCR is not supported yet
-
-The public resume-analysis API endpoint is not implemented yet.
 
 ## Requirements
 
@@ -84,6 +82,17 @@ Check service health at <http://127.0.0.1:8000/health> or with:
 ```bash
 curl http://127.0.0.1:8000/health
 ```
+
+Match one text-based PDF resume using multipart field `resume`:
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/resume-match \
+  -F "resume=@resume.pdf;type=application/pdf"
+```
+
+The endpoint is also available as an interactive file upload in Swagger at
+<http://127.0.0.1:8000/docs>. Authentication and broader production hardening
+are not implemented yet.
 
 ## Run tests
 
