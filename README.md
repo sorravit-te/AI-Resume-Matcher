@@ -12,8 +12,9 @@ The current implementation provides:
 - A validated 100-point scoring rubric
 - Safe text extraction from supported resume PDFs
 - Gemini-powered structured semantic evidence analysis
+- Deterministic evidence quote and page verification
 
-Deterministic evidence verification and actual candidate scoring are not
+Deterministic scoring and the public resume-analysis API endpoint are not
 implemented yet.
 
 ## PDF support
