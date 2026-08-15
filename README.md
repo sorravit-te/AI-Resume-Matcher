@@ -1,7 +1,7 @@
 # AI Resume Matcher
 
 AI Resume Matcher is an assignment project that will eventually compare PDF
-resumes with the EDVISORY AI & Data Solution Intern role and produce
+resumes with the EDVISORY tech AI & Data Solution role and produce
 explainable scoring results.
 
 ## Current status
@@ -15,8 +15,10 @@ The current implementation provides:
 - Deterministic evidence quote and page verification
 - Deterministic rubric scoring
 - End-to-end in-memory resume matching pipeline
+- Structured, privacy-safe API error responses
 
-Comprehensive API error mapping and production hardening are not implemented yet.
+Authentication, rate limiting, deployment, and broader production hardening are
+not implemented yet.
 
 ## PDF support
 
@@ -91,8 +93,9 @@ curl -X POST http://127.0.0.1:8000/api/v1/resume-match \
 ```
 
 The endpoint is also available as an interactive file upload in Swagger at
-<http://127.0.0.1:8000/docs>. Authentication and broader production hardening
-are not implemented yet.
+<http://127.0.0.1:8000/docs>. Upload reading is bounded by the PDF service's
+configured size limit, and both successful and known error responses use
+`Cache-Control: no-store`.
 
 ## Run tests
 
