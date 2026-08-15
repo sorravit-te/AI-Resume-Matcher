@@ -6,12 +6,14 @@ explainable scoring results.
 
 ## Current status
 
-Step 2 extends the Step 1 foundation with:
+The current implementation provides:
 
 - A machine-readable EDVISORY job definition
 - A validated 100-point scoring rubric
+- Safe text extraction from supported resume PDFs
+- Gemini-powered structured semantic evidence analysis
 
-Resume analysis, LLM analysis, and actual candidate scoring are not
+Deterministic evidence verification and actual candidate scoring are not
 implemented yet.
 
 ## PDF support
@@ -21,8 +23,8 @@ implemented yet.
 - Maximum length: 10 pages
 - OCR is not supported yet
 
-LLM analysis, semantic matching, candidate scoring, and a resume-analysis API
-endpoint are not implemented yet.
+Deterministic evidence verification, score calculation, and a public
+resume-analysis API endpoint are not implemented yet.
 
 ## Requirements
 
@@ -55,8 +57,7 @@ python -m pip install -e ".[dev]"
 
 ## Environment setup
 
-Copy `.env.example` to `.env` and adjust application metadata for your
-environment. No external provider credentials are configured at this stage.
+Copy `.env.example` to `.env` and adjust values for your environment:
 
 ```powershell
 Copy-Item .env.example .env
@@ -64,6 +65,10 @@ Copy-Item .env.example .env
 
 The `.env` file is ignored by Git and must not contain credentials intended for
 source control.
+
+Set `GEMINI_API_KEY` to enable structured semantic analysis. `GEMINI_MODEL`
+defaults to `gemini-3.6-flash`. The API key is not required to start the
+FastAPI application or run the deterministic test suite.
 
 ## Run the API
 
