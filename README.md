@@ -11,8 +11,18 @@ Step 2 extends the Step 1 foundation with:
 - A machine-readable EDVISORY job definition
 - A validated 100-point scoring rubric
 
-Resume processing, LLM analysis, and actual candidate scoring are not
+Resume analysis, LLM analysis, and actual candidate scoring are not
 implemented yet.
+
+## PDF support
+
+- PDF only; text-based English, Thai, and mixed-language PDFs
+- Maximum file size: 10 MiB
+- Maximum length: 10 pages
+- OCR is not supported yet
+
+LLM analysis, semantic matching, candidate scoring, and a resume-analysis API
+endpoint are not implemented yet.
 
 ## Requirements
 
