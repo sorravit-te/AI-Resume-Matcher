@@ -6,9 +6,13 @@ explainable scoring results.
 
 ## Current status
 
-Step 1 provides the project foundation only: centralized configuration, a
-FastAPI application, and a health endpoint. Resume processing, LLM
-integration, and scoring are not implemented yet.
+Step 2 extends the Step 1 foundation with:
+
+- A machine-readable EDVISORY job definition
+- A validated 100-point scoring rubric
+
+Resume processing, LLM analysis, and actual candidate scoring are not
+implemented yet.
 
 ## Requirements
 
@@ -42,7 +46,7 @@ python -m pip install -e ".[dev]"
 ## Environment setup
 
 Copy `.env.example` to `.env` and adjust application metadata for your
-environment. No external provider credentials are configured during Step 1.
+environment. No external provider credentials are configured at this stage.
 
 ```powershell
 Copy-Item .env.example .env
@@ -66,6 +70,7 @@ curl http://127.0.0.1:8000/health
 ```
 
 ## Run tests
+
 
 ```bash
 python -m pytest

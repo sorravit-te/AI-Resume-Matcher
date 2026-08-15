@@ -1,0 +1,589 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "edvisory_ai_data_solution_intern",
+  "company": "EDVISORY",
+  "title": "AI & Data Solution Intern",
+  "job_description": {
+    "responsibilities": [
+      "ทำงานร่วมกับผู้ใช้งานหรือทีมพัฒนาธุรกิจ เพื่อรวบรวมและทำความเข้าใจความต้องการของระบบ",
+      "ออกแบบ พัฒนา และปรับแต่งคำสั่ง prompt เพื่อเพิ่มประสิทธิภาพการทำงานของ AI",
+      "ออกแบบโครงสร้างระบบ กระบวนการทำงาน และการใช้งานของ AI application",
+      "ใช้ Large Language Models (LLMs) เพื่อพัฒนา AI application",
+      "ทดสอบการทำงานและประเมินประสิทธิภาพของ AI application",
+      "ทำงานร่วมกับทีมวิศวกรซอฟต์แวร์อย่างใกล้ชิด เพื่อนำ AI application ไปใช้ในระบบจริง"
+    ],
+    "qualifications": [
+      "ชำนาญในการเขียนโปรแกรมด้วย Python, prompt engineering, และ context engineering",
+      "มีทักษะในการคิดวิเคราะห์และแก้ไขปัญหาได้อย่างดีเยี่ยม",
+      "มีความสนใจในด้าน AI ระบบอัตโนมัติ (automation) และ data-driven solutions",
+      "มีความเข้าใจพื้นฐานเกี่ยวกับ Natural Language Processing (NLP) และแนวคิดของ machine learning",
+      "มีประสบการณ์ในการทำงานกับ API, JSON หรือ automation pipelines",
+      "หากมีประสบการณ์การใช้งานเครื่องมือหรือเทคโนโลยี เช่น n8n, SQL, Docker หรือแพลตฟอร์ม Cloud จะได้รับการพิจารณาเป็นพิเศษ"
+    ]
+  },
+  "scoring_semantics": {
+    "score_name": "JD Match Score",
+    "meaning": "Evidence-based alignment of a resume with this job definition.",
+    "decision_support_only": true,
+    "does_not_represent": [
+      "probability of being hired",
+      "probability of interview success",
+      "employee performance prediction",
+      "general candidate quality",
+      "an automated hire or reject decision"
+    ]
+  },
+  "education_analysis": {
+    "relevant_evidence": [
+      "degree",
+      "field or major",
+      "relevant coursework",
+      "academic concentration",
+      "relevant academic training"
+    ],
+    "descriptive_fields": [
+      "degree",
+      "field or major",
+      "faculty",
+      "university",
+      "GPA",
+      "current study year",
+      "expected graduation",
+      "coursework"
+    ],
+    "non_scoring_fields": [
+      "GPA",
+      "university name or ranking",
+      "faculty name",
+      "current study year",
+      "expected graduation"
+    ],
+    "missing_data_policy": "Absent education metadata is not provided, is not inferred, and does not create a scoring penalty."
+  },
+  "rating_scale": [
+    {
+      "rating": 0,
+      "description": "No sufficient evidence found"
+    },
+    {
+      "rating": 1,
+      "description": "Mention, exposure, or unsupported claim only"
+    },
+    {
+      "rating": 2,
+      "description": "Basic or limited practical evidence"
+    },
+    {
+      "rating": 3,
+      "description": "Clear hands-on experience"
+    },
+    {
+      "rating": 4,
+      "description": "Strong evidence through depth, ownership, multiple examples, or measurable outcome; this does not mean senior or expert."
+    }
+  ],
+  "match_types": [
+    {
+      "id": "direct",
+      "definition": "Resume evidence directly demonstrates the requested capability or technology, such as containerizing FastAPI services using Docker for the Docker criterion.",
+      "max_rating": 4
+    },
+    {
+      "id": "equivalent",
+      "definition": "Different wording or technology clearly demonstrates the same underlying required capability, such as PostgreSQL queries and schemas for SQL.",
+      "max_rating": 4
+    },
+    {
+      "id": "transferable",
+      "definition": "Experience is functionally similar and meaningfully transferable, but is not the requested technology or capability itself, such as Make.com for n8n.",
+      "max_rating": 3
+    },
+    {
+      "id": "adjacent",
+      "definition": "Related technology or experience exists but does not sufficiently demonstrate the requested capability, such as Kubernetes for Docker.",
+      "max_rating": 1
+    },
+    {
+      "id": "none",
+      "definition": "No relevant evidence is found.",
+      "max_rating": 0
+    }
+  ],
+  "evidence_policy": {
+    "allowed_source_types": [
+      "education",
+      "coursework",
+      "project",
+      "work_experience",
+      "skills",
+      "certification",
+      "other"
+    ],
+    "project_evidence_types": [
+      "academic project",
+      "personal project",
+      "hackathon",
+      "internship project",
+      "freelance project",
+      "work project",
+      "research project"
+    ],
+    "projects_are_evidence_not_scoring_category": true,
+    "certifications_are_supporting_evidence": true,
+    "work_experience_is_required": false,
+    "missing_information_principles": [
+      "missing information is not negative evidence",
+      "absence of evidence is not evidence of absence"
+    ],
+    "future_analysis_statuses": [
+      "not_provided",
+      "insufficient_evidence",
+      "no_match"
+    ],
+    "non_scoring_signals": {
+      "ai_automation_interest": "Interest in AI, automation, or data-driven solutions is a non-scoring JD signal; statements such as 'Passionate about AI' do not add JD Match Score."
+    },
+    "inference_rules": [
+      "PostgreSQL may demonstrate SQL.",
+      "FastAPI may support Python evidence when it is used in a development context.",
+      "Make.com is transferable to n8n, not direct evidence of n8n.",
+      "Kubernetes is adjacent to Docker, not evidence that Docker was used.",
+      "Using ChatGPT does not prove Prompt Engineering.",
+      "Using Gemini API does not automatically prove Context Engineering.",
+      "RAG or dynamic context construction may support Context Engineering.",
+      "Related technology must not automatically imply competence in another technology."
+    ]
+  },
+  "rubric_validation_targets": {
+    "maximum_score": 100,
+    "category_totals": {
+      "education": 10,
+      "skills": 40,
+      "knowledge": 25,
+      "tools": 25
+    },
+    "preferred_tools_total": 10
+  },
+  "categories": [
+    {
+      "id": "education",
+      "name": "Education",
+      "criteria": [
+        {
+          "id": "education.academic_relevance",
+          "name": "Academic Relevance",
+          "category": "education",
+          "weight": 10,
+          "priority": "core",
+          "jd_basis": [
+            "Relevant academic preparation can support the internship's AI, data, NLP, and machine-learning requirements."
+          ],
+          "description": "Holistic relevance of academic background to the role; no individual education field is mandatory.",
+          "positive_evidence_examples": [
+            "Degree or major in a relevant field",
+            "Relevant NLP, machine-learning, data, or AI coursework",
+            "Relevant academic concentration or training"
+          ],
+          "weak_evidence_examples": [
+            "Degree title with no relevant field, coursework, concentration, or training context"
+          ],
+          "do_not_infer": [
+            "GPA, university ranking, faculty, study year, or expected graduation as score inputs",
+            "Missing education metadata as a negative result"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "name": "Skills",
+      "criteria": [
+        {
+          "id": "skills.python",
+          "name": "Python Programming",
+          "category": "skills",
+          "weight": 10,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: proficiency in Python programming."
+          ],
+          "description": "Ability to use Python in relevant development, data, or AI work.",
+          "positive_evidence_examples": [
+            "Developed a FastAPI backend using Python",
+            "Built Python data pipelines",
+            "Implemented ML workflows using Python"
+          ],
+          "weak_evidence_examples": [
+            "Python listed in a skills section with no usage context"
+          ],
+          "do_not_infer": [
+            "General programming experience as Python experience"
+          ]
+        },
+        {
+          "id": "skills.prompt_engineering",
+          "name": "Prompt Engineering",
+          "category": "skills",
+          "weight": 8,
+          "priority": "core",
+          "jd_basis": [
+            "Responsibility: design, develop, and refine prompts.",
+            "Qualification: prompt engineering."
+          ],
+          "description": "Designing and improving prompts to guide AI behavior reliably.",
+          "positive_evidence_examples": [
+            "Designed structured or system prompts",
+            "Used few-shot or constraint-based prompting",
+            "Refined or evaluated prompts"
+          ],
+          "weak_evidence_examples": [
+            "Used ChatGPT"
+          ],
+          "do_not_infer": [
+            "LLM usage alone as Prompt Engineering"
+          ]
+        },
+        {
+          "id": "skills.context_engineering",
+          "name": "Context Engineering",
+          "category": "skills",
+          "weight": 6,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: context engineering."
+          ],
+          "description": "Constructing, selecting, or managing context so an AI application receives useful grounded inputs.",
+          "positive_evidence_examples": [
+            "RAG or retrieved context",
+            "Document grounding or dynamic context injection",
+            "Conversation-history management or context construction"
+          ],
+          "weak_evidence_examples": [
+            "Called a hosted LLM API without context design details"
+          ],
+          "do_not_infer": [
+            "Gemini or OpenAI API usage alone as Context Engineering"
+          ]
+        },
+        {
+          "id": "skills.ai_system_workflow_design",
+          "name": "AI System / Workflow Design",
+          "category": "skills",
+          "weight": 5,
+          "priority": "core",
+          "jd_basis": [
+            "Responsibility: design AI application structure, workflow, and use."
+          ],
+          "description": "Designing practical AI application flows, components, or integrations.",
+          "positive_evidence_examples": [
+            "Designed an AI application architecture",
+            "Mapped an AI workflow from input to output",
+            "Integrated an AI capability into a real system"
+          ],
+          "weak_evidence_examples": [
+            "General familiarity with AI tools"
+          ],
+          "do_not_infer": [
+            "Using an AI product as evidence of designing an AI system"
+          ]
+        },
+        {
+          "id": "skills.analytical_problem_solving",
+          "name": "Analytical & Problem Solving",
+          "category": "skills",
+          "weight": 4,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: strong analytical and problem-solving skills."
+          ],
+          "description": "Analyzing problems and applying a reasoned solution in relevant work or projects.",
+          "positive_evidence_examples": [
+            "Diagnosed a technical issue and described the resolution",
+            "Analyzed data or system behavior to improve an outcome"
+          ],
+          "weak_evidence_examples": [
+            "Self-rating as a problem solver without an example"
+          ],
+          "do_not_infer": [
+            "A generic teamwork claim as analytical problem solving"
+          ]
+        },
+        {
+          "id": "skills.requirement_collaboration",
+          "name": "Requirement Understanding & Collaboration",
+          "category": "skills",
+          "weight": 4,
+          "priority": "core",
+          "jd_basis": [
+            "Responsibility: work with users or the business-development team to understand system requirements.",
+            "Responsibility: collaborate closely with software engineers."
+          ],
+          "description": "Working with stakeholders or teammates to clarify needs and deliver a shared solution.",
+          "positive_evidence_examples": [
+            "Gathered requirements from users or stakeholders",
+            "Collaborated with engineers to deliver a feature",
+            "Translated business needs into implementation work"
+          ],
+          "weak_evidence_examples": [
+            "Listed team player without collaboration context"
+          ],
+          "do_not_infer": [
+            "Individual project work as stakeholder collaboration"
+          ]
+        },
+        {
+          "id": "skills.testing_evaluation",
+          "name": "Testing & Evaluation",
+          "category": "skills",
+          "weight": 3,
+          "priority": "core",
+          "jd_basis": [
+            "Responsibility: test AI applications and evaluate their performance."
+          ],
+          "description": "Testing behavior or assessing outcomes to improve an application.",
+          "positive_evidence_examples": [
+            "Created or ran tests for an application",
+            "Evaluated model or system outputs",
+            "Compared results against defined criteria"
+          ],
+          "weak_evidence_examples": [
+            "Claimed interest in quality without testing activity"
+          ],
+          "do_not_infer": [
+            "Deploying an application as proof it was tested"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "knowledge",
+      "name": "Knowledge",
+      "criteria": [
+        {
+          "id": "knowledge.llm_generative_ai",
+          "name": "LLM / Generative AI",
+          "category": "knowledge",
+          "weight": 10,
+          "priority": "core",
+          "jd_basis": [
+            "Responsibility: use Large Language Models to develop AI applications."
+          ],
+          "description": "Understanding relevant to applying LLMs or generative AI in an application context.",
+          "positive_evidence_examples": [
+            "Built an LLM-powered application",
+            "Explained LLM behavior, limitations, or integration choices",
+            "Completed a relevant generative-AI project"
+          ],
+          "weak_evidence_examples": [
+            "Used a consumer AI chatbot"
+          ],
+          "do_not_infer": [
+            "AI interest alone as LLM or Generative AI knowledge"
+          ]
+        },
+        {
+          "id": "knowledge.nlp",
+          "name": "Natural Language Processing",
+          "category": "knowledge",
+          "weight": 8,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: foundational understanding of Natural Language Processing (NLP)."
+          ],
+          "description": "Foundational NLP concepts or their applied use.",
+          "positive_evidence_examples": [
+            "NLP coursework or training",
+            "Text classification, extraction, or language-processing project",
+            "Explained relevant NLP concepts"
+          ],
+          "weak_evidence_examples": [
+            "Mentioned text data without NLP method or learning context"
+          ],
+          "do_not_infer": [
+            "Using an LLM as proof of NLP fundamentals"
+          ]
+        },
+        {
+          "id": "knowledge.machine_learning",
+          "name": "Machine Learning Fundamentals",
+          "category": "knowledge",
+          "weight": 7,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: foundational understanding of machine-learning concepts."
+          ],
+          "description": "Foundational machine-learning knowledge relevant to AI application work.",
+          "positive_evidence_examples": [
+            "Machine-learning coursework",
+            "Built or evaluated a machine-learning workflow",
+            "Applied model-training or evaluation fundamentals"
+          ],
+          "weak_evidence_examples": [
+            "Listed machine learning with no context"
+          ],
+          "do_not_infer": [
+            "Data analysis alone as machine-learning knowledge"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "Tools & Technology",
+      "criteria": [
+        {
+          "id": "tools.api",
+          "name": "API",
+          "category": "tools",
+          "weight": 6,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: experience working with APIs."
+          ],
+          "description": "Practical work with application programming interfaces.",
+          "positive_evidence_examples": [
+            "Built or consumed a REST API",
+            "Integrated an API into an application",
+            "Documented API requests and responses"
+          ],
+          "weak_evidence_examples": [
+            "Named an API without describing use"
+          ],
+          "do_not_infer": [
+            "General web browsing as API experience"
+          ]
+        },
+        {
+          "id": "tools.json_structured_data",
+          "name": "JSON / Structured Data",
+          "category": "tools",
+          "weight": 3,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: experience working with JSON."
+          ],
+          "description": "Using JSON or comparable structured data in a practical workflow.",
+          "positive_evidence_examples": [
+            "Designed or processed JSON payloads",
+            "Validated structured data in an application",
+            "Used JSON in an API integration"
+          ],
+          "weak_evidence_examples": [
+            "Mentioned data formats without use context"
+          ],
+          "do_not_infer": [
+            "Using an API as automatic proof of JSON handling"
+          ]
+        },
+        {
+          "id": "tools.automation_pipeline",
+          "name": "Automation Pipeline / Integration",
+          "category": "tools",
+          "weight": 6,
+          "priority": "core",
+          "jd_basis": [
+            "Qualification: experience with automation pipelines.",
+            "Qualification: interest in automation and data-driven solutions."
+          ],
+          "description": "Building or integrating automated workflows that move data or trigger useful actions.",
+          "positive_evidence_examples": [
+            "Built an automation workflow",
+            "Integrated services into a pipeline",
+            "Automated a recurring data or business process"
+          ],
+          "weak_evidence_examples": [
+            "Expressed interest in automation"
+          ],
+          "do_not_infer": [
+            "A manual multi-step process as an automation pipeline"
+          ]
+        },
+        {
+          "id": "tools.n8n",
+          "name": "n8n",
+          "category": "tools",
+          "weight": 2.5,
+          "priority": "preferred",
+          "jd_basis": [
+            "Preferred qualification: n8n experience."
+          ],
+          "description": "Preferred workflow-automation technology; it is not a mandatory requirement.",
+          "positive_evidence_examples": [
+            "Built or maintained n8n workflows",
+            "Integrated services using n8n"
+          ],
+          "weak_evidence_examples": [
+            "Read about n8n without a usage example"
+          ],
+          "do_not_infer": [
+            "Make.com or another automation platform as direct n8n experience"
+          ]
+        },
+        {
+          "id": "tools.sql",
+          "name": "SQL",
+          "category": "tools",
+          "weight": 2.5,
+          "priority": "preferred",
+          "jd_basis": [
+            "Preferred qualification: SQL experience."
+          ],
+          "description": "Preferred structured-query capability; it is not a mandatory requirement.",
+          "positive_evidence_examples": [
+            "Wrote SQL queries",
+            "Developed PostgreSQL queries or schemas",
+            "Used SQL for data analysis or application features"
+          ],
+          "weak_evidence_examples": [
+            "Listed databases without query work"
+          ],
+          "do_not_infer": [
+            "NoSQL database usage as SQL experience"
+          ]
+        },
+        {
+          "id": "tools.docker",
+          "name": "Docker",
+          "category": "tools",
+          "weight": 2.5,
+          "priority": "preferred",
+          "jd_basis": [
+            "Preferred qualification: Docker experience."
+          ],
+          "description": "Preferred containerization technology; it is not a mandatory requirement.",
+          "positive_evidence_examples": [
+            "Containerized a FastAPI service using Docker",
+            "Wrote Dockerfiles or Docker Compose configurations"
+          ],
+          "weak_evidence_examples": [
+            "Recognized container concepts without Docker use"
+          ],
+          "do_not_infer": [
+            "Kubernetes as evidence that Docker was used"
+          ]
+        },
+        {
+          "id": "tools.cloud",
+          "name": "Cloud Platform",
+          "category": "tools",
+          "weight": 2.5,
+          "priority": "preferred",
+          "jd_basis": [
+            "Preferred qualification: Cloud platform experience."
+          ],
+          "description": "Preferred cloud-platform experience; it is not a mandatory requirement.",
+          "positive_evidence_examples": [
+            "Deployed or configured an application on a cloud platform",
+            "Used cloud storage, compute, or managed services in a project"
+          ],
+          "weak_evidence_examples": [
+            "General cloud awareness with no project context"
+          ],
+          "do_not_infer": [
+            "Using a hosted developer tool as cloud-platform experience"
+          ]
+        }
+      ]
+    }
+  ]
+}
