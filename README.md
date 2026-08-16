@@ -97,6 +97,14 @@ The endpoint is also available as an interactive file upload in Swagger at
 configured size limit, and both successful and known error responses use
 `Cache-Control: no-store`.
 
+## Deliverables
+
+- [Workflow flowchart](docs/WORKFLOW.md) presents the implemented request,
+  semantic-analysis, deterministic-validation, scoring, output, and error paths.
+- [Example result JSON](examples/example_result.json) is a deterministic
+  synthetic example generated with the authoritative rubric, production scoring
+  service, and `ResumeMatchResult` serialization. It is not a real applicant.
+
 ## Run tests
 
 

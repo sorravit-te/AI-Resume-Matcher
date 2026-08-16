@@ -1,0 +1,374 @@
+{
+  "job_id": "edvisory_ai_data_solution_intern",
+  "company": "EDVISORY",
+  "job_title": "AI & Data Solution Intern",
+  "education": {
+    "degree": "Bachelor of Science",
+    "field_or_major": "Computer Science",
+    "faculty": null,
+    "university": "Synthetic University",
+    "gpa": null,
+    "current_study_year": null,
+    "expected_graduation": null,
+    "coursework": [
+      "Natural Language Processing"
+    ]
+  },
+  "score_name": "JD Match Score",
+  "overall_score": 68.25,
+  "maximum_score": 100.0,
+  "category_scores": [
+    {
+      "category": "education",
+      "score": 7.5,
+      "max_score": 10.0
+    },
+    {
+      "category": "skills",
+      "score": 31.5,
+      "max_score": 40.0
+    },
+    {
+      "category": "knowledge",
+      "score": 11.5,
+      "max_score": 25.0
+    },
+    {
+      "category": "tools",
+      "score": 17.75,
+      "max_score": 25.0
+    }
+  ],
+  "criterion_scores": [
+    {
+      "criterion_id": "education.academic_relevance",
+      "category": "education",
+      "weight": 10.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 7.5,
+      "max_score": 10.0,
+      "evidence": [
+        {
+          "text": "Bachelor of Science in Computer Science with NLP coursework",
+          "page": 1,
+          "source_type": "education"
+        }
+      ],
+      "rationale": "เรซูเม่ตัวอย่างระบุวุฒิวิทยาศาสตรบัณฑิตด้านวิทยาการคอมพิวเตอร์และรายวิชา NLP จึงเป็นพื้นฐานการศึกษาที่เกี่ยวข้องโดยตรงกับตำแหน่ง"
+    },
+    {
+      "criterion_id": "skills.python",
+      "category": "skills",
+      "weight": 10.0,
+      "match_type": "direct",
+      "evidence_level": 4,
+      "match_cap": 4,
+      "effective_rating": 4,
+      "score": 10.0,
+      "max_score": 10.0,
+      "evidence": [
+        {
+          "text": "Owned a Python FastAPI backend supporting three business workflows, including request validation, external API integrations, monitoring, and production incident fixes",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครมีประสบการณ์รับผิดชอบ Backend ด้วย Python และ FastAPI สำหรับหลาย Workflow รวมถึง Validation, Integration และการดูแลระบบ จึงมีหลักฐานเชิงปฏิบัติที่ชัดเจนสำหรับทักษะ Python"
+    },
+    {
+      "criterion_id": "skills.prompt_engineering",
+      "category": "skills",
+      "weight": 8.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 6.0,
+      "max_score": 8.0,
+      "evidence": [
+        {
+          "text": "Designed structured prompts for an LLM application",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครมีประสบการณ์ออกแบบ Structured Prompt สำหรับระบบ LLM และนำไปใช้กับงานจริง จึงตรงกับทักษะ Prompt Engineering โดยตรง"
+    },
+    {
+      "criterion_id": "skills.context_engineering",
+      "category": "skills",
+      "weight": 6.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 4.5,
+      "max_score": 6.0,
+      "evidence": [
+        {
+          "text": "Implemented RAG with retrieved context from an internal knowledge base",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครเคยพัฒนา RAG และจัดการ Context จากฐานความรู้ภายใน ซึ่งเป็นประสบการณ์ที่เกี่ยวข้องโดยตรงกับ Context Engineering"
+    },
+    {
+      "criterion_id": "skills.ai_system_workflow_design",
+      "category": "skills",
+      "weight": 5.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 3.75,
+      "max_score": 5.0,
+      "evidence": [
+        {
+          "text": "Designed an LLM workflow from API input to grounded JSON output",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครออกแบบลำดับการทำงานของระบบ LLM ตั้งแต่รับข้อมูลผ่าน API จนสร้างผลลัพธ์ JSON ที่อ้างอิงข้อมูล จึงตรงกับการออกแบบ AI System Workflow"
+    },
+    {
+      "criterion_id": "skills.analytical_problem_solving",
+      "category": "skills",
+      "weight": 4.0,
+      "match_type": "direct",
+      "evidence_level": 2,
+      "match_cap": 4,
+      "effective_rating": 2,
+      "score": 2.0,
+      "max_score": 4.0,
+      "evidence": [
+        {
+          "text": "Diagnosed retrieval failures and corrected document chunking",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครวิเคราะห์สาเหตุของปัญหาการค้นคืนข้อมูลและแก้ไขการแบ่งเอกสาร แสดงถึงการแก้ปัญหาอย่างเป็นขั้นตอนจากหลักฐานการทำงานจริง"
+    },
+    {
+      "criterion_id": "skills.requirement_collaboration",
+      "category": "skills",
+      "weight": 4.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 3.0,
+      "max_score": 4.0,
+      "evidence": [
+        {
+          "text": "Gathered requirements from users and collaborated with backend engineers",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครรวบรวมความต้องการจากผู้ใช้และทำงานร่วมกับวิศวกร Backend จึงมีหลักฐานโดยตรงด้านการทำความเข้าใจ Requirement และการทำงานร่วมกัน"
+    },
+    {
+      "criterion_id": "skills.testing_evaluation",
+      "category": "skills",
+      "weight": 3.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 2.25,
+      "max_score": 3.0,
+      "evidence": [
+        {
+          "text": "Created automated tests and evaluated LLM responses against test cases",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครสร้าง Automated Test และประเมินคำตอบของ LLM เทียบกับ Test Case จึงมีประสบการณ์ตรงด้าน Testing และ Evaluation"
+    },
+    {
+      "criterion_id": "knowledge.llm_generative_ai",
+      "category": "knowledge",
+      "weight": 10.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 7.5,
+      "max_score": 10.0,
+      "evidence": [
+        {
+          "text": "Built an LLM application with grounded responses",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครพัฒนาแอปพลิเคชัน LLM ที่สร้างคำตอบโดยอ้างอิงข้อมูล จึงมีหลักฐานเชิงปฏิบัติโดยตรงด้าน LLM และ Generative AI"
+    },
+    {
+      "criterion_id": "knowledge.nlp",
+      "category": "knowledge",
+      "weight": 8.0,
+      "match_type": "direct",
+      "evidence_level": 2,
+      "match_cap": 4,
+      "effective_rating": 2,
+      "score": 4.0,
+      "max_score": 8.0,
+      "evidence": [
+        {
+          "text": "Completed NLP coursework covering text classification",
+          "page": 1,
+          "source_type": "coursework"
+        }
+      ],
+      "rationale": "ผู้สมัครเรียนรายวิชา NLP ที่ครอบคลุมการจำแนกข้อความ จึงมีหลักฐานพื้นฐานโดยตรงด้าน Natural Language Processing"
+    },
+    {
+      "criterion_id": "knowledge.machine_learning",
+      "category": "knowledge",
+      "weight": 7.0,
+      "match_type": "none",
+      "evidence_level": 0,
+      "match_cap": 0,
+      "effective_rating": 0,
+      "score": 0.0,
+      "max_score": 7.0,
+      "evidence": [],
+      "rationale": "ไม่พบหลักฐานเกี่ยวกับ Machine Learning ที่เพียงพอในเรซูเม่ตัวอย่างนี้"
+    },
+    {
+      "criterion_id": "tools.api",
+      "category": "tools",
+      "weight": 6.0,
+      "match_type": "direct",
+      "evidence_level": 4,
+      "match_cap": 4,
+      "effective_rating": 4,
+      "score": 6.0,
+      "max_score": 6.0,
+      "evidence": [
+        {
+          "text": "Owned a Python FastAPI backend supporting three business workflows, including request validation, external API integrations, monitoring, and production incident fixes",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครรับผิดชอบ FastAPI Backend ที่รองรับหลาย Workflow และเชื่อมต่อ External API พร้อมดูแล Validation และการทำงานจริง จึงมีประสบการณ์ API โดยตรงอย่างชัดเจน"
+    },
+    {
+      "criterion_id": "tools.json_structured_data",
+      "category": "tools",
+      "weight": 3.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 2.25,
+      "max_score": 3.0,
+      "evidence": [
+        {
+          "text": "Validated JSON request and response payloads",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครตรวจสอบความถูกต้องของ JSON ทั้ง Request และ Response จึงมีประสบการณ์ตรงในการจัดการ Structured Data ภายในระบบ"
+    },
+    {
+      "criterion_id": "tools.automation_pipeline",
+      "category": "tools",
+      "weight": 6.0,
+      "match_type": "direct",
+      "evidence_level": 3,
+      "match_cap": 4,
+      "effective_rating": 3,
+      "score": 4.5,
+      "max_score": 6.0,
+      "evidence": [
+        {
+          "text": "Built Make.com automation workflows for CRM synchronization",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครสร้าง Workflow บน Make.com เพื่อซิงโครไนซ์ข้อมูล CRM จึงมีหลักฐานโดยตรงด้าน Automation Pipeline และการเชื่อมต่อระบบ"
+    },
+    {
+      "criterion_id": "tools.n8n",
+      "category": "tools",
+      "weight": 2.5,
+      "match_type": "transferable",
+      "evidence_level": 4,
+      "match_cap": 3,
+      "effective_rating": 3,
+      "score": 1.875,
+      "max_score": 2.5,
+      "evidence": [
+        {
+          "text": "Owned five Make.com automation workflows integrating CRM, support, and notification services, reducing manual data-entry steps",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครไม่มีหลักฐานการใช้ n8n โดยตรง แต่มีประสบการณ์รับผิดชอบ Workflow Automation หลายชุดด้วย Make.com ซึ่งเป็นทักษะที่สามารถถ่ายโอนไปใช้กับ n8n ได้"
+    },
+    {
+      "criterion_id": "tools.sql",
+      "category": "tools",
+      "weight": 2.5,
+      "match_type": "equivalent",
+      "evidence_level": 4,
+      "match_cap": 4,
+      "effective_rating": 4,
+      "score": 2.5,
+      "max_score": 2.5,
+      "evidence": [
+        {
+          "text": "Designed PostgreSQL schemas, wrote multi-table joins, added indexes, and optimized queries for application and reporting workloads",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครมีประสบการณ์ใช้ PostgreSQL ทั้งการออกแบบ Schema, เขียน Join, สร้าง Index และปรับประสิทธิภาพ Query จึงถือเป็นหลักฐานที่เทียบเท่ากับทักษะ SQL"
+    },
+    {
+      "criterion_id": "tools.docker",
+      "category": "tools",
+      "weight": 2.5,
+      "match_type": "adjacent",
+      "evidence_level": 4,
+      "match_cap": 1,
+      "effective_rating": 1,
+      "score": 0.625,
+      "max_score": 2.5,
+      "evidence": [
+        {
+          "text": "Owned Kubernetes deployments across multiple services, configuring health checks, rollouts, autoscaling, and production incident recovery",
+          "page": 1,
+          "source_type": "project"
+        }
+      ],
+      "rationale": "ผู้สมัครมีประสบการณ์ดูแลระบบบน Kubernetes หลายบริการ ซึ่งเกี่ยวข้องกับเทคโนโลยี Container แต่ยังไม่ใช่หลักฐานการใช้งาน Docker โดยตรง จึงจัดเป็นทักษะที่ใกล้เคียง"
+    },
+    {
+      "criterion_id": "tools.cloud",
+      "category": "tools",
+      "weight": 2.5,
+      "match_type": "none",
+      "evidence_level": 0,
+      "match_cap": 0,
+      "effective_rating": 0,
+      "score": 0.0,
+      "max_score": 2.5,
+      "evidence": [],
+      "rationale": "ไม่พบหลักฐานการใช้งาน Cloud Platform ที่เพียงพอในเรซูเม่ตัวอย่างนี้"
+    }
+  ]
+}
