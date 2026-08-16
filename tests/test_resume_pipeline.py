@@ -98,6 +98,7 @@ def test_scoring_and_result_use_the_validated_analysis_object(monkeypatch) -> No
     original_analysis = create_analysis(job)
     validated_analysis = original_analysis.model_copy(
         update={
+            "candidate_name": "Validated Synthetic Candidate",
             "education": EducationMetadata(
                 degree="Validated Bachelor Degree",
                 field_or_major="Artificial Intelligence",
@@ -119,6 +120,8 @@ def test_scoring_and_result_use_the_validated_analysis_object(monkeypatch) -> No
     stages["scoring"].assert_called_once_with(validated_analysis, job)
     assert stages["scoring"].call_args.args[0] is validated_analysis
     assert stages["scoring"].call_args.args[0] is not original_analysis
+    assert result.candidate_name == validated_analysis.candidate_name
+    assert result.candidate_name != original_analysis.candidate_name
     assert result.education == validated_analysis.education
     assert result.education != original_analysis.education
 
@@ -294,6 +297,7 @@ def test_result_excludes_resume_and_provider_internals(monkeypatch) -> None:
     result = resume_pipeline.run_resume_matching(b"private bytes", "resume.pdf", job=job)
     result_fields = set(ResumeMatchResult.model_fields)
 
+    assert "candidate_name" in result_fields
     assert result_fields.isdisjoint(
         {"file_bytes", "full_text", "pages", "api_key", "provider_response", "prompt"}
     )

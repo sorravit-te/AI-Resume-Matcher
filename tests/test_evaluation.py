@@ -458,7 +458,11 @@ def test_score_arithmetic_is_python_owned_and_analysis_remains_score_free() -> N
 
     score = score_resume_analysis(analysis, job)
 
-    assert set(ResumeAnalysis.model_fields) == {"education", "criteria"}
+    assert set(ResumeAnalysis.model_fields) == {
+        "candidate_name",
+        "education",
+        "criteria",
+    }
     assert "score" not in CriterionAnalysis.model_fields
     assert score.overall_score == sum(
         (item.score for item in score.criterion_scores),

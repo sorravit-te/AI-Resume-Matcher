@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from app.models.resume_analysis import EducationMetadata
+from app.models.resume_analysis import CandidateName, EducationMetadata
 from app.models.resume_score import (
     CategoryScore,
     CriterionScore,
@@ -16,6 +16,7 @@ from app.models.resume_score import (
 class ResumeMatchResult(ScoreModel):
     """Final JD Match Score without raw resume or provider internals."""
 
+    candidate_name: CandidateName | None = None
     job_id: str = Field(min_length=1)
     company: str = Field(min_length=1)
     job_title: str = Field(min_length=1)

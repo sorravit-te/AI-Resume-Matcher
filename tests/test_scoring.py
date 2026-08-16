@@ -257,3 +257,19 @@ def test_scoring_does_not_mutate_the_analysis_or_add_score_fields() -> None:
 
     assert analysis.model_dump() == original_data
     assert "score" not in ResumeAnalysis.model_fields
+
+
+def test_candidate_name_does_not_change_deterministic_scoring() -> None:
+    job = load_job_definition()
+    analysis = create_analysis(
+        job,
+        {"skills.python": (AnalysisMatchType.DIRECT, 3)},
+    )
+    named_analysis = analysis.model_copy(
+        update={"candidate_name": "Synthetic Candidate"}
+    )
+
+    assert score_resume_analysis(named_analysis, job) == score_resume_analysis(
+        analysis,
+        job,
+    )

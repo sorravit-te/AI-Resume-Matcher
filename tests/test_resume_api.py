@@ -29,9 +29,10 @@ from app.services.scoring import ScoringError, score_resume_analysis
 client = TestClient(app)
 
 
-def create_result() -> ResumeMatchResult:
+def create_result(candidate_name: str | None = None) -> ResumeMatchResult:
     job = load_job_definition()
     analysis = ResumeAnalysis(
+        candidate_name=candidate_name,
         education={},
         criteria=[
             CriterionAnalysis(
@@ -46,6 +47,7 @@ def create_result() -> ResumeMatchResult:
     )
     score = score_resume_analysis(analysis, job)
     return ResumeMatchResult(
+        candidate_name=analysis.candidate_name,
         job_id=job.job_id,
         company=job.company,
         job_title=job.title,
@@ -72,7 +74,85 @@ def test_successful_upload_forwards_bytes_and_filename_once(monkeypatch) -> None
     assert response.status_code == 200
     assert response.json() == expected_result.model_dump(mode="json")
     assert response.headers["cache-control"] == "no-store"
+    assert response.headers["content-disposition"] == (
+        'attachment; filename="resume_match_result.json"'
+    )
     pipeline.assert_called_once_with(file_bytes, "Candidate.Resume.PDF")
+
+
+def test_success_filename_uses_sanitized_candidate_name(monkeypatch) -> None:
+    expected_result = create_result("Sorravit Sitthisut")
+    monkeypatch.setattr(
+        resume_route,
+        "run_resume_matching",
+        Mock(return_value=expected_result),
+    )
+
+    response = client.post(
+        "/api/v1/resume-match",
+        files={"resume": ("resume.pdf", b"%PDF-synthetic", "application/pdf")},
+    )
+
+    assert response.headers["content-disposition"] == (
+        'attachment; filename="Sorravit_Sitthisut_resume_match.json"'
+    )
+    assert response.headers["content-type"].startswith("application/json")
+    assert response.headers["cache-control"] == "no-store"
+    assert ResumeMatchResult.model_validate(response.json()) == expected_result
+
+
+def test_success_filename_normalizes_surrounding_and_repeated_whitespace(
+    monkeypatch,
+) -> None:
+    expected_result = create_result("  Sorravit   Sitthisut  ")
+    monkeypatch.setattr(
+        resume_route,
+        "run_resume_matching",
+        Mock(return_value=expected_result),
+    )
+
+    response = client.post(
+        "/api/v1/resume-match",
+        files={"resume": ("resume.pdf", b"%PDF-synthetic", "application/pdf")},
+    )
+
+    assert response.headers["content-disposition"] == (
+        'attachment; filename="Sorravit_Sitthisut_resume_match.json"'
+    )
+
+
+@pytest.mark.parametrize(
+    ("candidate_name", "expected_filename"),
+    [
+        (
+            r"../Sorravit\Sitthisut::",
+            "Sorravit_Sitthisut_resume_match.json",
+        ),
+        (r"../\--__", "resume_match_result.json"),
+    ],
+)
+def test_success_filename_cannot_contain_path_semantics(
+    monkeypatch,
+    candidate_name: str,
+    expected_filename: str,
+) -> None:
+    expected_result = create_result(candidate_name)
+    monkeypatch.setattr(
+        resume_route,
+        "run_resume_matching",
+        Mock(return_value=expected_result),
+    )
+
+    response = client.post(
+        "/api/v1/resume-match",
+        files={"resume": ("resume.pdf", b"%PDF-synthetic", "application/pdf")},
+    )
+    disposition = response.headers["content-disposition"]
+
+    assert disposition == f'attachment; filename="{expected_filename}"'
+    assert "/" not in disposition
+    assert "\\" not in disposition
+    assert ".." not in disposition
 
 
 def test_missing_resume_field_uses_fastapi_validation() -> None:
@@ -160,6 +240,7 @@ def test_pdf_errors_have_structured_status_mapping(
     assert response.status_code == status_code
     assert response.json()["error"]["code"] == code.value
     assert response.headers["cache-control"] == "no-store"
+    assert "content-disposition" not in response.headers
 
 
 @pytest.mark.parametrize(

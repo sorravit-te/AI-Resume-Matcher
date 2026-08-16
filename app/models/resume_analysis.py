@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from enum import StrEnum
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 from app.models.job_definition import JobDefinition
 from app.models.resume_document import ResumeDocument
@@ -14,6 +15,12 @@ class AnalysisModel(BaseModel):
     """Strict immutable base for data returned by the LLM."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+CandidateName = Annotated[
+    str,
+    StringConstraints(strip_whitespace=True, min_length=1),
+]
 
 
 class EvidenceSourceType(StrEnum):
@@ -77,6 +84,7 @@ class EducationMetadata(AnalysisModel):
 class ResumeAnalysis(AnalysisModel):
     """Complete score-free analysis returned by the structured LLM call."""
 
+    candidate_name: CandidateName | None = None
     education: EducationMetadata
     criteria: list[CriterionAnalysis] = Field(min_length=1)
 

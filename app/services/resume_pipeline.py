@@ -32,6 +32,7 @@ def run_resume_matching(
     score = score_resume_analysis(validated_analysis, resolved_job)
 
     return ResumeMatchResult(
+        candidate_name=validated_analysis.candidate_name,
         job_id=resolved_job.job_id,
         company=resolved_job.company,
         job_title=resolved_job.title,

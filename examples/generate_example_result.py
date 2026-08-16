@@ -167,6 +167,7 @@ def build_example_result() -> ResumeMatchResult:
         ),
     }
     analysis = ResumeAnalysis(
+        candidate_name="Synthetic Candidate",
         education=EducationMetadata(
             degree="Bachelor of Science",
             field_or_major="Computer Science",
@@ -188,6 +189,7 @@ def build_example_result() -> ResumeMatchResult:
     )
     score = score_resume_analysis(analysis, job)
     return ResumeMatchResult(
+        candidate_name=analysis.candidate_name,
         job_id=job.job_id,
         company=job.company,
         job_title=job.title,
