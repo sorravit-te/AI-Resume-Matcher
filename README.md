@@ -103,3 +103,26 @@ configured size limit, and both successful and known error responses use
 ```bash
 python -m pytest
 ```
+
+## Evaluation
+
+The normal test suite is deterministic, requires no Gemini credentials, and
+makes no external network calls:
+
+```bash
+python -m pytest
+```
+
+Run the separate live semantic evaluation explicitly with:
+
+```bash
+python -m evals.run_live_eval
+```
+
+The live evaluation requires `GEMINI_API_KEY`, uses the configured Gemini
+model, and consumes Gemini API usage. All included evaluation resumes are
+synthetic, and the live runner is intentionally excluded from normal pytest.
+
+Evaluation measures how consistently resume evidence maps to the configured JD
+and rubric. It does not establish candidate quality, future job performance,
+hire probability, demographic fairness, or an automated hiring decision.
