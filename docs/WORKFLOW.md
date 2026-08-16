@@ -20,7 +20,7 @@ flowchart LR
 
     subgraph Semantic[LLM semantic layer]
         Gemini[Gemini 3.6 Flash<br/>resume text is untrusted data]
-        Analysis[Structured ResumeAnalysis<br/>quote and page / match type<br/>evidence level / Thai rationale]
+        Analysis[Structured ResumeAnalysis<br/>candidate name metadata<br/>quote and page / match type<br/>evidence level / Thai rationale]
         Gemini --> Analysis
     end
 
@@ -31,8 +31,8 @@ flowchart LR
     end
 
     subgraph Output[API output]
-        Result[ResumeMatchResult<br/>JD Match Score]
-        Success[JSON response<br/>Cache-Control: no-store]
+        Result[ResumeMatchResult<br/>candidate name / JD Match Score]
+        Success[JSON response with safe filename<br/>Cache-Control: no-store]
         Result --> Success
     end
 
@@ -60,6 +60,7 @@ flowchart LR
   follow instructions embedded in the resume.
 - Gemini identifies semantic evidence but does not calculate scores. Python owns
   match caps, effective ratings, weighted scores, and totals.
+- Candidate name is descriptive metadata only and does not affect scoring.
 - Evidence must be an exact normalized substring on its claimed page.
 - Missing evidence is not interpreted as proof that a candidate lacks an ability.
 - The JD Match Score describes alignment with this rubric; it is not hire
