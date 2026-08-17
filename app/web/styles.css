@@ -13,6 +13,7 @@
   --danger: #b42318;
   --focus: #087f8c;
   --accent-gradient: linear-gradient(135deg, #0ca8b8 0%, #2563eb 100%);
+  --app-content-width: 880px;
 }
 
 * {
@@ -29,8 +30,8 @@ body {
     radial-gradient(circle at 90% 6%, rgba(37, 99, 235, 0.045), transparent 27rem),
     var(--background);
   font-family:
-    "Inter", "Leelawadee UI", Tahoma, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+    "Inter", "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   line-height: 1.5;
 }
 
@@ -63,8 +64,12 @@ input:focus-visible {
   justify-content: flex-start;
 }
 
+.matcher-card,
+.result-section {
+  width: min(100%, var(--app-content-width));
+}
+
 .matcher-card {
-  width: min(100%, 620px);
   border: 1px solid rgba(185, 203, 213, 0.7);
   border-radius: 24px;
   background: var(--surface);
@@ -72,7 +77,7 @@ input:focus-visible {
 }
 
 .hero {
-  padding: 34px 36px 22px;
+  padding: 36px clamp(32px, 6vw, 54px) 24px;
   text-align: center;
 }
 
@@ -103,12 +108,12 @@ h1 {
 }
 
 .upload-panel {
-  padding: 0 32px 32px;
+  padding: 0 clamp(32px, 6vw, 54px) 36px;
 }
 
 .drop-zone {
   display: flex;
-  min-height: 232px;
+  min-height: 240px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -287,7 +292,7 @@ h1 {
 
 .file-details strong {
   overflow: hidden;
-  max-width: 360px;
+  max-width: 520px;
   font-size: 0.85rem;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -325,7 +330,7 @@ h1 {
 
 .remove-button:disabled {
   cursor: wait;
-  opacity: 0.55;
+  opacity: 0.65;
 }
 
 .status-message {
@@ -333,10 +338,15 @@ h1 {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.8rem;
+  line-height: 1.45;
+  opacity: 0;
+  transition: margin 160ms ease, opacity 160ms ease;
 }
 
 .status-message:not(:empty) {
+  min-height: 1.2rem;
   margin: 10px 2px 0;
+  opacity: 1;
 }
 
 .status-message.is-error {
@@ -376,7 +386,7 @@ h1 {
 
 .analyze-button:disabled {
   cursor: not-allowed;
-  color: #697789;
+  color: #5f6f80;
   background: #dce5ea;
   box-shadow: none;
   filter: none;
@@ -410,7 +420,6 @@ h1 {
 }
 
 .result-section {
-  width: min(100%, 880px);
   overflow: hidden;
   border: 1px solid rgba(185, 203, 213, 0.72);
   border-radius: 24px;
@@ -460,8 +469,10 @@ h1 {
 .result-header h2,
 .education-details h3,
 .detailed-analysis > h3,
-.criterion-group-title {
-  font-family: "Space Grotesk", "Inter", "Leelawadee UI", Tahoma, sans-serif;
+.criterion-group-title,
+.selected-category-title,
+.education-details-title {
+  font-family: "Space Grotesk", "Noto Sans Thai", "Inter", sans-serif;
   letter-spacing: -0.025em;
 }
 
@@ -507,6 +518,7 @@ h1 {
 
 .result-job {
   margin: 10px 0 0;
+  overflow-wrap: anywhere;
   color: var(--text);
   font-size: 1rem;
   font-weight: 600;
@@ -514,6 +526,7 @@ h1 {
 
 .result-company {
   margin: 2px 0 0;
+  overflow-wrap: anywhere;
   color: var(--text-muted);
   font-size: 0.87rem;
   font-weight: 500;
@@ -559,6 +572,7 @@ h1 {
 }
 
 .score-progress {
+  display: block;
   height: 7px;
   overflow: hidden;
   border-radius: 999px;
@@ -587,7 +601,7 @@ h1 {
   margin: 14px 0 0;
   color: var(--text-muted);
   font-size: 0.78rem;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .category-score-grid {
@@ -599,11 +613,38 @@ h1 {
 
 .category-score-card {
   --category-accent: #2563eb;
+  position: relative;
+  display: block;
   min-width: 0;
+  width: 100%;
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: #fbfdff;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 180ms ease, background-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms ease;
+}
+
+.category-score-card:hover:not([aria-pressed="true"]) {
+  border-color: #b9d9e7;
+  background: #f6fbfd;
+  box-shadow: 0 5px 12px rgba(36, 76, 102, 0.06);
+  transform: translateY(-1px);
+}
+
+.category-score-card[aria-pressed="true"] {
+  border-color: var(--category-accent);
+  background: #f2faff;
+  box-shadow: 0 7px 16px rgba(36, 76, 102, 0.09);
+}
+
+.category-score-card:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
 .category-score-card:nth-child(2) {
@@ -619,14 +660,36 @@ h1 {
 }
 
 .category-score-name {
+  display: block;
   margin: 0;
+  padding-right: 56px;
   overflow-wrap: anywhere;
   color: var(--text-muted);
   font-size: 0.76rem;
   font-weight: 600;
 }
 
+.category-score-card[aria-pressed="true"] .category-score-name {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.category-selected-label {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  color: var(--text);
+  background: #e7f4f9;
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
 .category-score-value {
+  display: block;
   margin: 5px 0 11px;
   color: var(--text);
   font-family: "Space Grotesk", "Inter", sans-serif;
@@ -639,13 +702,11 @@ h1 {
   background: var(--category-accent);
 }
 
-.education-details,
 .detailed-analysis {
   padding: 29px 36px 32px;
   border-top: 1px solid var(--border);
 }
 
-.education-details h3,
 .detailed-analysis > h3 {
   margin: 0 0 18px;
   font-size: 1.25rem;
@@ -656,6 +717,32 @@ h1 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 15px 22px;
   margin: 0;
+}
+
+.selected-category-panel {
+  min-width: 0;
+}
+
+.selected-category-title {
+  margin: 0 0 12px;
+  color: #31445c;
+  font-size: 1rem;
+  letter-spacing: -0.025em;
+}
+
+.education-details {
+  margin: 0 0 18px;
+  padding: 18px;
+  border: 1px solid #d8e8ef;
+  border-radius: 14px;
+  background: #f8fcfe;
+}
+
+.education-details-title {
+  margin: 0 0 15px;
+  color: #31445c;
+  font-size: 0.9rem;
+  letter-spacing: -0.015em;
 }
 
 .education-detail-item {
@@ -706,21 +793,16 @@ h1 {
   font-size: 0.75rem;
 }
 
-.criterion-group + .criterion-group {
-  margin-top: 26px;
-}
-
-.criterion-group-title {
-  margin: 0 0 10px;
-  color: #31445c;
-  font-size: 1rem;
-}
-
 .criterion-card {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 13px;
   background: #fff;
+}
+
+.criterion-card[open] {
+  border-color: #bdd9e8;
+  box-shadow: 0 6px 16px rgba(36, 76, 102, 0.06);
 }
 
 .criterion-card + .criterion-card {
@@ -757,6 +839,10 @@ h1 {
 
 .criterion-card summary:hover {
   background: #f9fcfe;
+}
+
+.criterion-card[open] summary {
+  background: #f7fbfe;
 }
 
 .criterion-card summary:focus-visible {
@@ -893,7 +979,7 @@ h1 {
   color: #263b51;
   font-size: 0.81rem;
   font-style: normal;
-  line-height: 1.58;
+  line-height: 1.65;
   white-space: pre-wrap;
 }
 
@@ -915,7 +1001,7 @@ h1 {
   overflow-wrap: anywhere;
   color: #3d4f64;
   font-size: 0.82rem;
-  line-height: 1.65;
+  line-height: 1.7;
   white-space: pre-wrap;
 }
 
@@ -934,6 +1020,7 @@ h1 {
 @media (max-width: 640px) {
   .page-shell {
     align-items: start;
+    gap: 24px;
     padding: 20px 10px;
   }
 
@@ -979,7 +1066,6 @@ h1 {
 
   .result-header,
   .score-overview,
-  .education-details,
   .detailed-analysis {
     padding-right: 18px;
     padding-left: 18px;
@@ -994,7 +1080,24 @@ h1 {
     padding: 20px;
   }
 
-  .category-score-grid,
+  .category-score-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .education-details {
+    padding: 16px;
+  }
+
+  .category-selected-label {
+    top: 13px;
+    right: 13px;
+  }
+
+  .category-score-name {
+    padding-right: 52px;
+  }
+
   .education-details-list,
   .criterion-metrics {
     grid-template-columns: 1fr;
@@ -1004,6 +1107,55 @@ h1 {
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
+  }
+}
+
+@media (max-width: 390px) {
+  .page-shell {
+    padding: 16px 8px;
+  }
+
+  .hero {
+    padding: 25px 16px 17px;
+  }
+
+  .upload-panel {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .drop-zone {
+    min-height: 204px;
+    padding: 22px 14px;
+  }
+
+  .file-details strong {
+    max-width: min(176px, 41vw);
+  }
+
+  .category-score-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-header,
+  .score-overview,
+  .detailed-analysis {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .overall-score-card {
+    padding: 18px;
+  }
+
+  .education-details {
+    padding: 14px;
+  }
+
+  .criterion-card summary,
+  .criterion-content {
+    padding-right: 13px;
+    padding-left: 13px;
   }
 }
 
@@ -1021,12 +1173,14 @@ h1 {
   .drop-zone,
   .upload-illustration,
   .analyze-button,
+  .status-message,
   .button-spinner,
   .file-summary:not([hidden]),
   .result-section:not([hidden]),
   .score-progress > span,
   .criterion-card summary::after,
-  .download-button {
+  .download-button,
+  .category-score-card {
     transition: none;
     animation: none;
   }
@@ -1045,7 +1199,8 @@ h1 {
   }
 
   .download-button:hover:not(:disabled),
-  .download-button:active:not(:disabled) {
+  .download-button:active:not(:disabled),
+  .category-score-card:hover:not([aria-pressed="true"]) {
     transform: none;
   }
 }

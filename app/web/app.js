@@ -2,6 +2,7 @@
 
 const RESUME_MATCH_ENDPOINT = "/api/v1/resume-match";
 const DEFAULT_RESULT_FILENAME = "resume_match_result.json";
+const DEFAULT_RESULT_CATEGORY = "education";
 const GENERIC_ANALYSIS_ERROR = "Unable to analyze the resume. Please try again.";
 const NETWORK_ANALYSIS_ERROR =
   "Could not reach the analysis service. Please try again.";
@@ -13,12 +14,6 @@ const CATEGORY_LABELS = Object.freeze({
   knowledge: "Knowledge",
   tools: "Tools",
 });
-const CATEGORY_ORDER = Object.freeze([
-  "education",
-  "skills",
-  "knowledge",
-  "tools",
-]);
 const CRITERION_LABELS = Object.freeze({
   "education.academic_relevance": "Academic Relevance",
   "skills.python": "Python Programming",
@@ -100,10 +95,6 @@ const overallScoreProgressFill = document.querySelector(
 const categoryScoreContainer = document.querySelector(
   "#category-score-container",
 );
-const educationDetails = document.querySelector("#education-details");
-const educationDetailsList = document.querySelector(
-  "#education-details-list",
-);
 const criterionDetailContainer = document.querySelector(
   "#criterion-detail-container",
 );
@@ -113,6 +104,7 @@ let dragDepth = 0;
 let isAnalyzing = false;
 let latestResult = null;
 let latestResultFilename = DEFAULT_RESULT_FILENAME;
+let selectedResultCategory = null;
 
 function isClearlyPdf(file) {
   return (
@@ -141,6 +133,7 @@ function setStatus(message, isError = false) {
 function clearLatestResult() {
   latestResult = null;
   latestResultFilename = DEFAULT_RESULT_FILENAME;
+  selectedResultCategory = null;
   clearResultVisualization();
 }
 
@@ -315,17 +308,25 @@ function createTextElement(tagName, className, text) {
   return element;
 }
 
-function createScoreProgress(score, maximum, label, className = "") {
-  const progress = document.createElement("div");
+function createScoreProgress(
+  score,
+  maximum,
+  label,
+  className = "",
+  isDecorative = false,
+) {
+  const progress = document.createElement(isDecorative ? "span" : "div");
   progress.className = `score-progress ${className}`.trim();
-  progress.setAttribute("role", "progressbar");
-  progress.setAttribute(
-    "aria-label",
-    `${label}: ${formatScore(score)} of ${formatScore(maximum)}`,
-  );
-  progress.setAttribute("aria-valuemin", "0");
-  progress.setAttribute("aria-valuenow", String(score));
-  progress.setAttribute("aria-valuemax", String(maximum));
+  if (!isDecorative) {
+    progress.setAttribute("role", "progressbar");
+    progress.setAttribute(
+      "aria-label",
+      `${label}: ${formatScore(score)} of ${formatScore(maximum)}`,
+    );
+    progress.setAttribute("aria-valuemin", "0");
+    progress.setAttribute("aria-valuenow", String(score));
+    progress.setAttribute("aria-valuemax", String(maximum));
+  }
 
   const fill = document.createElement("span");
   fill.style.width = `${visualPercentage(score, maximum)}%`;
@@ -349,8 +350,7 @@ function clearResultVisualization() {
   overallScoreProgress.removeAttribute("aria-valuemax");
   overallScoreProgressFill.style.width = "0%";
   categoryScoreContainer.replaceChildren();
-  educationDetails.hidden = true;
-  educationDetailsList.replaceChildren();
+  criterionDetailContainer.removeAttribute("aria-labelledby");
   criterionDetailContainer.replaceChildren();
 }
 
@@ -391,42 +391,93 @@ function renderOverallScore(result) {
 function renderCategoryScores(categoryScores) {
   const cards = categoryScores.map((category) => {
     const label = presentationLabel(CATEGORY_LABELS, category.category);
-    const card = document.createElement("article");
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = "category-score-card";
+    card.dataset.category = category.category;
+    card.setAttribute("aria-pressed", "false");
+    card.setAttribute("aria-controls", "criterion-detail-container");
+    card.addEventListener("click", () => {
+      selectResultCategory(category.category);
+    });
+    const selectedLabel = createTextElement(
+      "span",
+      "category-selected-label",
+      "Selected",
+    );
+    selectedLabel.hidden = true;
     card.append(
-      createTextElement("h3", "category-score-name", label),
+      createTextElement("span", "category-score-name", label),
+      selectedLabel,
       createTextElement(
-        "p",
+        "span",
         "category-score-value",
         `${formatScore(category.score)} / ${formatScore(category.max_score)}`,
       ),
-      createScoreProgress(category.score, category.max_score, label),
+      createScoreProgress(category.score, category.max_score, label, "", true),
     );
     return card;
   });
   categoryScoreContainer.replaceChildren(...cards);
+  updateCategorySelectionState();
 }
 
-function appendEducationItem(label, value) {
+function updateCategorySelectionState() {
+  const cards = categoryScoreContainer.querySelectorAll(".category-score-card");
+  for (const card of cards) {
+    const isSelected = card.dataset.category === selectedResultCategory;
+    card.setAttribute("aria-pressed", String(isSelected));
+    card.classList.toggle("is-selected", isSelected);
+    const selectedLabel = card.querySelector(".category-selected-label");
+    if (selectedLabel) {
+      selectedLabel.hidden = !isSelected;
+    }
+  }
+}
+
+function defaultResultCategory(categoryScores) {
+  return categoryScores.some(
+    (category) => category.category === DEFAULT_RESULT_CATEGORY,
+  )
+    ? DEFAULT_RESULT_CATEGORY
+    : categoryScores[0].category;
+}
+
+function selectResultCategory(category) {
+  if (
+    !isUsableResult(latestResult) ||
+    !latestResult.category_scores.some(
+      (categoryScore) => categoryScore.category === category,
+    )
+  ) {
+    return;
+  }
+
+  selectedResultCategory = category;
+  updateCategorySelectionState();
+  renderSelectedCategoryDetail(latestResult);
+}
+
+function appendEducationItem(container, label, value) {
   const item = document.createElement("div");
   item.className = "education-detail-item";
   item.append(
     createTextElement("dt", "education-detail-label", label),
     createTextElement("dd", "education-detail-value", value),
   );
-  educationDetailsList.append(item);
+  container.append(item);
 }
 
-function renderEducation(education) {
-  educationDetailsList.replaceChildren();
+function createEducationDetails(education) {
   if (!isResultObject(education)) {
-    educationDetails.hidden = true;
-    return;
+    return null;
   }
 
+  const detailsList = document.createElement("dl");
+  detailsList.className = "education-details-list";
   for (const [field, label] of EDUCATION_FIELDS) {
     if (isNonEmptyString(education[field])) {
-      appendEducationItem(label, education[field]);
+      appendEducationItem(detailsList, label, education[field]);
     }
   }
 
@@ -445,10 +496,25 @@ function renderEducation(education) {
       createTextElement("dt", "education-detail-label", "Coursework"),
       terms,
     );
-    educationDetailsList.append(item);
+    detailsList.append(item);
   }
 
-  educationDetails.hidden = educationDetailsList.childElementCount === 0;
+  if (detailsList.childElementCount === 0) {
+    return null;
+  }
+
+  const details = document.createElement("section");
+  details.className = "education-details";
+  details.append(
+    createTextElement("h5", "education-details-title", "Education Details"),
+    detailsList,
+    createTextElement(
+      "p",
+      "education-note",
+      "Education metadata is shown as extracted information; scoring is based on the validated criterion evidence and rubric.",
+    ),
+  );
+  return details;
 }
 
 function appendMetric(container, label, value) {
@@ -577,43 +643,40 @@ function createCriterionCard(criterion) {
   return details;
 }
 
-function orderedCriterionGroups(criteria) {
-  const groups = new Map();
-  for (const criterion of criteria) {
-    if (!groups.has(criterion.category)) {
-      groups.set(criterion.category, []);
-    }
-    groups.get(criterion.category).push(criterion);
-  }
+function renderSelectedCategoryDetail(result) {
+  const selectedCategory = result.category_scores.some(
+    (category) => category.category === selectedResultCategory,
+  )
+    ? selectedResultCategory
+    : defaultResultCategory(result.category_scores);
+  selectedResultCategory = selectedCategory;
 
-  const ordered = [];
-  for (const category of CATEGORY_ORDER) {
-    if (groups.has(category)) {
-      ordered.push([category, groups.get(category)]);
-      groups.delete(category);
-    }
-  }
-  ordered.push(...groups.entries());
-  return ordered;
-}
-
-function renderCriteria(criteria) {
-  const sections = orderedCriterionGroups(criteria).map(
-    ([category, categoryCriteria]) => {
-      const section = document.createElement("section");
-      section.className = "criterion-group";
-      section.append(
-        createTextElement(
-          "h4",
-          "criterion-group-title",
-          presentationLabel(CATEGORY_LABELS, category),
-        ),
-        ...categoryCriteria.map(createCriterionCard),
-      );
-      return section;
-    },
+  const panel = document.createElement("section");
+  panel.className = "selected-category-panel";
+  const title = createTextElement(
+    "h4",
+    "selected-category-title",
+    presentationLabel(CATEGORY_LABELS, selectedCategory),
   );
-  criterionDetailContainer.replaceChildren(...sections);
+  title.id = "selected-category-title";
+  panel.append(title);
+
+  if (selectedCategory === "education") {
+    const educationDetails = createEducationDetails(result.education);
+    if (educationDetails) {
+      panel.append(educationDetails);
+    }
+  }
+
+  const criteria = result.criterion_scores.filter(
+    (criterion) => criterion.category === selectedCategory,
+  );
+  panel.append(...criteria.map(createCriterionCard));
+  criterionDetailContainer.replaceChildren(panel);
+  criterionDetailContainer.setAttribute(
+    "aria-labelledby",
+    "selected-category-title",
+  );
 }
 
 function renderResult(result) {
@@ -628,9 +691,9 @@ function renderResult(result) {
   resultJobTitle.textContent = result.job_title;
   resultCompany.textContent = result.company;
   renderOverallScore(result);
+  selectedResultCategory = defaultResultCategory(result.category_scores);
   renderCategoryScores(result.category_scores);
-  renderEducation(result.education);
-  renderCriteria(result.criterion_scores);
+  renderSelectedCategoryDetail(result);
 
   resultSection.hidden = false;
   pageShell.classList.add("has-result");
