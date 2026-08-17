@@ -5,6 +5,7 @@ const DEFAULT_RESULT_FILENAME = "resume_match_result.json";
 const GENERIC_ANALYSIS_ERROR = "Unable to analyze the resume. Please try again.";
 const NETWORK_ANALYSIS_ERROR =
   "Could not reach the analysis service. Please try again.";
+const DOWNLOAD_ERROR = "Unable to download the analysis result. Please try again.";
 
 const CATEGORY_LABELS = Object.freeze({
   education: "Education",
@@ -85,6 +86,7 @@ const analyzeButton = document.querySelector("#analyze-button");
 const analyzeButtonLabel = document.querySelector("#analyze-button-label");
 const analyzeSpinner = document.querySelector("#analyze-spinner");
 const resultSection = document.querySelector("#result-section");
+const downloadButton = document.querySelector("#download-result");
 const resultTitle = document.querySelector("#result-title");
 const resultJobTitle = document.querySelector("#result-job-title");
 const resultCompany = document.querySelector("#result-company");
@@ -334,6 +336,7 @@ function createScoreProgress(score, maximum, label, className = "") {
 function clearResultVisualization() {
   resultSection.hidden = true;
   pageShell.classList.remove("has-result");
+  downloadButton.disabled = true;
   resultTitle.textContent = "";
   resultJobTitle.textContent = "";
   resultCompany.textContent = "";
@@ -349,6 +352,17 @@ function clearResultVisualization() {
   educationDetails.hidden = true;
   educationDetailsList.replaceChildren();
   criterionDetailContainer.replaceChildren();
+}
+
+function isSafeResultFilename(filename) {
+  return (
+    typeof filename === "string" &&
+    /^[A-Za-z0-9_-]+\.json$/i.test(filename)
+  );
+}
+
+function updateDownloadAvailability() {
+  downloadButton.disabled = !isUsableResult(latestResult);
 }
 
 function renderOverallScore(result) {
@@ -620,6 +634,7 @@ function renderResult(result) {
 
   resultSection.hidden = false;
   pageShell.classList.add("has-result");
+  updateDownloadAvailability();
   const reducedMotion =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   resultSection.scrollIntoView({
@@ -638,11 +653,46 @@ function resultFilenameFromHeader(contentDisposition) {
     /(?:^|;)\s*filename=(?:"([^"]+)"|([^;\s]+))/i.exec(contentDisposition);
   const candidate = (filenameMatch?.[1] ?? filenameMatch?.[2] ?? "").trim();
 
-  if (!/^[A-Za-z0-9_-]+\.json$/i.test(candidate)) {
+  if (!isSafeResultFilename(candidate)) {
     return DEFAULT_RESULT_FILENAME;
   }
 
   return candidate;
+}
+
+function downloadLatestResult() {
+  if (!isUsableResult(latestResult)) {
+    updateDownloadAvailability();
+    setStatus(DOWNLOAD_ERROR, true);
+    return;
+  }
+
+  let objectUrl = null;
+  let anchor = null;
+  try {
+    const json = `${JSON.stringify(latestResult, null, 2)}\n`;
+    const blob = new Blob([json], {
+      type: "application/json;charset=utf-8",
+    });
+    objectUrl = URL.createObjectURL(blob);
+    anchor = document.createElement("a");
+    anchor.href = objectUrl;
+    anchor.download = isSafeResultFilename(latestResultFilename)
+      ? latestResultFilename
+      : DEFAULT_RESULT_FILENAME;
+    anchor.hidden = true;
+    document.body.append(anchor);
+    anchor.click();
+  } catch {
+    setStatus(DOWNLOAD_ERROR, true);
+  } finally {
+    if (anchor) {
+      anchor.remove();
+    }
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+    }
+  }
 }
 
 async function analyzeSelectedResume() {
@@ -764,3 +814,5 @@ dropZone.addEventListener("drop", (event) => {
 analyzeButton.addEventListener("click", () => {
   void analyzeSelectedResume();
 });
+
+downloadButton.addEventListener("click", downloadLatestResult);

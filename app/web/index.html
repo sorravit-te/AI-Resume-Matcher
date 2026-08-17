@@ -131,7 +131,17 @@
         hidden
       >
         <header class="result-header">
-          <p class="result-label">Analysis Result</p>
+          <div class="result-header-top">
+            <p class="result-label">Analysis Result</p>
+            <button
+              class="download-button"
+              id="download-result"
+              type="button"
+              disabled
+            >
+              Download JSON
+            </button>
+          </div>
           <h2 id="result-title"></h2>
           <p class="result-job" id="result-job-title"></p>
           <p class="result-company" id="result-company"></p>

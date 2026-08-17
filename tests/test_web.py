@@ -25,6 +25,8 @@ def test_root_returns_ai_resume_matcher_html() -> None:
     assert 'id="category-score-container"' in response.text
     assert 'id="education-details"' in response.text
     assert 'id="criterion-detail-container"' in response.text
+    assert 'id="download-result"' in response.text
+    assert "Download JSON" in response.text
 
 
 def test_root_referenced_stylesheet_is_available() -> None:
@@ -64,11 +66,31 @@ def test_root_referenced_javascript_is_available() -> None:
     assert "clearResultVisualization();" in response.text
     assert "Object.hasOwn" in response.text
     assert "GENERIC_ANALYSIS_ERROR" in response.text
+    assert "function downloadLatestResult()" in response.text
+    assert "JSON.stringify(latestResult, null, 2)" in response.text
+    assert "new Blob" in response.text
+    assert 'type: "application/json;charset=utf-8"' in response.text
+    assert "URL.createObjectURL" in response.text
+    assert "URL.revokeObjectURL" in response.text
+    assert "anchor.download" in response.text
+    assert "latestResultFilename" in response.text
+    assert 'const DEFAULT_RESULT_FILENAME = "resume_match_result.json"' in response.text
+    assert "isSafeResultFilename" in response.text
     assert "innerHTML" not in response.text
     assert '"Content-Type"' not in response.text
     assert response.text.count("fetch(") == 1
-    assert "new Blob" not in response.text
-    assert "URL.createObjectURL" not in response.text
+    assert "localStorage" not in response.text
+    assert "sessionStorage" not in response.text
+    assert "indexedDB" not in response.text
+
+    download_start = response.text.index("function downloadLatestResult()")
+    download_end = response.text.index(
+        "\nasync function analyzeSelectedResume()", download_start + 1
+    )
+    download_code = response.text[download_start:download_end]
+    assert "fetch(" not in download_code
+    assert "RESUME_MATCH_ENDPOINT" not in download_code
+    assert "selectedFile" not in download_code
 
 
 def test_existing_docs_and_health_routes_remain_available() -> None:
