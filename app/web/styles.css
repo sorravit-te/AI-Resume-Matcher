@@ -138,6 +138,21 @@ h1 {
   transform: translateY(-2px);
 }
 
+.drop-zone.is-disabled,
+.drop-zone.is-disabled:hover,
+.drop-zone.is-disabled:focus-visible,
+.drop-zone.is-disabled:focus-within {
+  border-color: var(--border-strong);
+  background: var(--surface-tint);
+  box-shadow: none;
+  cursor: wait;
+  transform: none;
+}
+
+.drop-zone.is-disabled .upload-illustration {
+  transform: none;
+}
+
 .upload-illustration {
   display: grid;
   width: 86px;
@@ -300,6 +315,11 @@ h1 {
   background: rgba(180, 35, 24, 0.07);
 }
 
+.remove-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .status-message {
   min-height: 0;
   margin: 0;
@@ -317,8 +337,12 @@ h1 {
 }
 
 .analyze-button {
+  display: inline-flex;
   width: 100%;
   min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin-top: 14px;
   border: 0;
   border-radius: 11px;
@@ -349,6 +373,32 @@ h1 {
   box-shadow: none;
   filter: none;
   transform: none;
+}
+
+.analyze-button.is-loading:disabled {
+  cursor: wait;
+  color: var(--surface);
+  background: var(--accent-gradient);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+}
+
+.button-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: var(--surface);
+  border-radius: 50%;
+  animation: button-spinner-rotation 750ms linear infinite;
+}
+
+.button-spinner[hidden] {
+  display: none;
+}
+
+@keyframes button-spinner-rotation {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .visually-hidden {
@@ -410,6 +460,7 @@ h1 {
   .drop-zone,
   .upload-illustration,
   .analyze-button,
+  .button-spinner,
   .file-summary:not([hidden]) {
     transition: none;
     animation: none;

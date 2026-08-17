@@ -18,6 +18,8 @@ def test_root_returns_ai_resume_matcher_html() -> None:
     assert '<h1 id="page-title">Upload your resume</h1>' in response.text
     assert 'type="file"' in response.text
     assert 'accept="application/pdf,.pdf"' in response.text
+    assert 'id="upload-panel" aria-busy="false"' in response.text
+    assert 'id="analyze-spinner"' in response.text
 
 
 def test_root_referenced_stylesheet_is_available() -> None:
@@ -38,7 +40,14 @@ def test_root_referenced_javascript_is_available() -> None:
 
     assert response.status_code == 200
     assert "javascript" in response.headers["content-type"]
-    assert "fetch(" not in response.text
+    assert 'const RESUME_MATCH_ENDPOINT = "/api/v1/resume-match"' in response.text
+    assert "new FormData()" in response.text
+    assert 'formData.append("resume", selectedFile, selectedFile.name)' in response.text
+    assert "isAnalyzing" in response.text
+    assert 'setAttribute("aria-busy", String(analyzing))' in response.text
+    assert 'analyzing ? "Analyzing..." : "Analyze Resume"' in response.text
+    assert 'headers.get("Content-Disposition")' in response.text
+    assert '"Content-Type"' not in response.text
 
 
 def test_existing_docs_and_health_routes_remain_available() -> None:
