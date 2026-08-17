@@ -20,6 +20,11 @@ def test_root_returns_ai_resume_matcher_html() -> None:
     assert 'accept="application/pdf,.pdf"' in response.text
     assert 'id="upload-panel" aria-busy="false"' in response.text
     assert 'id="analyze-spinner"' in response.text
+    assert 'id="result-section"' in response.text
+    assert 'id="overall-score-progress"' in response.text
+    assert 'id="category-score-container"' in response.text
+    assert 'id="education-details"' in response.text
+    assert 'id="criterion-detail-container"' in response.text
 
 
 def test_root_referenced_stylesheet_is_available() -> None:
@@ -47,7 +52,23 @@ def test_root_referenced_javascript_is_available() -> None:
     assert 'setAttribute("aria-busy", String(analyzing))' in response.text
     assert 'analyzing ? "Analyzing..." : "Analyze Resume"' in response.text
     assert 'headers.get("Content-Disposition")' in response.text
+    assert "function renderResult(result)" in response.text
+    assert "const CRITERION_LABELS" in response.text
+    assert '"knowledge.machine_learning"' in response.text
+    assert '"tools.automation_pipeline"' in response.text
+    assert 'document.createElement("details")' in response.text
+    assert "document.createElement" in response.text
+    assert ".textContent" in response.text
+    assert ".replaceChildren" in response.text
+    assert "function isUsableResult(result)" in response.text
+    assert "clearResultVisualization();" in response.text
+    assert "Object.hasOwn" in response.text
+    assert "GENERIC_ANALYSIS_ERROR" in response.text
+    assert "innerHTML" not in response.text
     assert '"Content-Type"' not in response.text
+    assert response.text.count("fetch(") == 1
+    assert "new Blob" not in response.text
+    assert "URL.createObjectURL" not in response.text
 
 
 def test_existing_docs_and_health_routes_remain_available() -> None:

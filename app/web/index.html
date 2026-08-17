@@ -123,6 +123,68 @@
           </button>
         </div>
       </section>
+
+      <section
+        class="result-section"
+        id="result-section"
+        aria-labelledby="result-title"
+        hidden
+      >
+        <header class="result-header">
+          <p class="result-label">Analysis Result</p>
+          <h2 id="result-title"></h2>
+          <p class="result-job" id="result-job-title"></p>
+          <p class="result-company" id="result-company"></p>
+        </header>
+
+        <section class="score-overview" aria-labelledby="overall-score-name">
+          <div class="overall-score-card">
+            <p class="score-name" id="overall-score-name"></p>
+            <p class="overall-score-value">
+              <strong id="overall-score-value"></strong>
+              <span aria-hidden="true">/</span>
+              <span id="overall-score-maximum"></span>
+            </p>
+            <div
+              class="score-progress score-progress--overall"
+              id="overall-score-progress"
+              role="progressbar"
+            >
+              <span id="overall-score-progress-fill"></span>
+            </div>
+            <p class="decision-support-note">
+              JD Match Score measures evidence-based alignment with this job
+              definition. It is not a hiring probability or an automatic
+              hiring decision.
+            </p>
+          </div>
+
+          <div
+            class="category-score-grid"
+            id="category-score-container"
+            aria-label="Category scores"
+          ></div>
+        </section>
+
+        <section
+          class="education-details"
+          id="education-details"
+          aria-labelledby="education-details-title"
+          hidden
+        >
+          <h3 id="education-details-title">Education Details</h3>
+          <dl class="education-details-list" id="education-details-list"></dl>
+          <p class="education-note">
+            Education metadata is shown as extracted information; scoring is
+            based on the validated criterion evidence and rubric.
+          </p>
+        </section>
+
+        <section class="detailed-analysis" aria-labelledby="detailed-analysis-title">
+          <h3 id="detailed-analysis-title">Detailed Analysis</h3>
+          <div id="criterion-detail-container"></div>
+        </section>
+      </section>
     </main>
   </body>
 </html>
