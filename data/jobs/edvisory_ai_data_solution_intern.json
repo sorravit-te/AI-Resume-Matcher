@@ -314,14 +314,17 @@
           ],
           "description": "Analyzing problems and applying a reasoned solution in relevant work or projects.",
           "positive_evidence_examples": [
-            "Diagnosed a technical issue and described the resolution",
-            "Analyzed data or system behavior to improve an outcome"
+            "Level 3: clear hands-on analytical/problem-solving evidence identifying a meaningful problem or constraint and showing an action, technical solution, optimization, or measured outcome",
+            "Level 4: explicitly exceptional analytical depth beyond normal hands-on problem solving (e.g., explicit root-cause diagnosis, systematic experimentation, comparison of multiple alternatives with explicit trade-offs)"
           ],
           "weak_evidence_examples": [
             "Self-rating as a problem solver without an example"
           ],
           "do_not_infer": [
-            "A generic teamwork claim as analytical problem solving"
+            "A generic teamwork claim as analytical problem solving",
+            "Metrics, quantified outcomes, or successfully solving a difficult problem alone are not enough for Level 4",
+            "Multiple separate Level 3 examples or projects with good outcomes must not be combined to manufacture Level 4",
+            "When Level 3 versus Level 4 is ambiguous, or if strong hands-on problem solving is demonstrated without explicit deeper analytical process, choose Level 3"
           ]
         },
         {
@@ -596,14 +599,17 @@
           ],
           "description": "Preferred cloud-platform experience; it is not a mandatory requirement.",
           "positive_evidence_examples": [
-            "Deployed or configured an application on a cloud platform",
-            "Used cloud storage, compute, or managed services in a project"
+            "Level 3 requires explicit cloud deployment/infrastructure/configuration/architecture responsibility",
+            "Level 2 is for application-level use or integration of a managed cloud service without explicit cloud infrastructure/deployment responsibility"
           ],
           "weak_evidence_examples": [
-            "General cloud awareness with no project context"
+            "A cloud platform or service is only mentioned in a skills/tool list, with no demonstrated use"
           ],
           "do_not_infer": [
-            "Using a hosted developer tool as cloud-platform experience"
+            "Using a hosted developer tool as cloud-platform experience",
+            "Do not infer cloud engineering responsibility merely from the service being hosted by a cloud provider or an application using a managed database/service",
+            "Do not infer cloud engineering from generic statements such as scalable architecture unless explicit cloud engineering responsibilities are also supported",
+            "If the resume clearly shows application-level use of a managed cloud service but does not explicitly show cloud deployment/infrastructure/configuration responsibility, choose Level 2 rather than Level 3"
           ]
         }
       ]

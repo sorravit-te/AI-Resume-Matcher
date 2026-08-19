@@ -144,3 +144,17 @@ def test_sql_includes_strict_level_boundary() -> None:
     sql_crit = next(c for c in job.criteria if c.id == "tools.sql")
     assert any("appearing only in a skills list" in ex for ex in sql_crit.weak_evidence_examples)
     assert any("Listing several related database technologies does not turn mention-only" in rule for rule in sql_crit.do_not_infer)
+
+def test_cloud_includes_strict_level_boundary() -> None:
+    job = load_job_definition()
+    cloud_crit = next(c for c in job.criteria if c.id == "tools.cloud")
+    assert any("Level 3 requires explicit cloud deployment/infrastructure/configuration/architecture responsibility" in ex for ex in cloud_crit.positive_evidence_examples)
+    assert any("choose Level 2 rather than Level 3" in rule for rule in cloud_crit.do_not_infer)
+
+def test_analytical_problem_solving_includes_strict_level_boundary() -> None:
+    job = load_job_definition()
+    aps_crit = next(c for c in job.criteria if c.id == "skills.analytical_problem_solving")
+    assert any("Level 4: explicitly exceptional analytical depth" in ex for ex in aps_crit.positive_evidence_examples)
+    assert any("alone are not enough for Level 4" in rule for rule in aps_crit.do_not_infer)
+    assert any("must not be combined to manufacture Level 4" in rule for rule in aps_crit.do_not_infer)
+    assert any("choose Level 3" in rule for rule in aps_crit.do_not_infer)
