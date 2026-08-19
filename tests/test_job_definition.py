@@ -101,3 +101,46 @@ def test_loader_rejects_consistent_but_incorrect_preferred_tools_total(tmp_path)
 
     with pytest.raises(ValidationError, match="preferred tools total must match"):
         load_job_definition(write_definition(tmp_path, definition_data))
+
+
+def test_rating_scale_includes_strict_evidence_boundaries() -> None:
+    job = load_job_definition()
+    descriptions = [level.description for level in job.rating_scale]
+
+    assert "No supporting evidence" in descriptions[0]
+    assert "Mention only" in descriptions[1]
+    assert "Limited practical evidence" in descriptions[2]
+    assert "Clear hands-on evidence" in descriptions[3]
+    assert "Strong demonstrated evidence" in descriptions[4]
+    assert "Do not assign Level 4 merely because the evidence contains numbers" in descriptions[4]
+
+
+def test_context_engineering_includes_strict_guidance() -> None:
+    job = load_job_definition()
+    context_eng = next(c for c in job.criteria if c.id == "skills.context_engineering")
+
+    do_not_infer = context_eng.do_not_infer
+    assert "sending document text/data to an LLM" in do_not_infer
+    assert "OCR followed by LLM processing" in do_not_infer
+
+    positive_examples = context_eng.positive_evidence_examples
+    assert "context construction" in positive_examples
+    assert "context selection" in positive_examples
+    assert "RAG or retrieved context" not in positive_examples
+    assert "RAG implemented with explicit context selection, preparation, or assembly" in positive_examples
+
+
+def test_json_structured_data_includes_csv_clarification() -> None:
+    job = load_job_definition()
+    json_crit = next(c for c in job.criteria if c.id == "tools.json_structured_data")
+    assert any("is direct evidence of the Structured Data portion" in ex for ex in json_crit.positive_evidence_examples)
+    assert any("CSV" in rule for rule in json_crit.do_not_infer)
+    assert any("Do not downgrade demonstrated structured-data work to equivalent" in rule for rule in json_crit.do_not_infer)
+    assert any("unless JSON is actually supported" in rule for rule in json_crit.do_not_infer)
+
+
+def test_sql_includes_strict_level_boundary() -> None:
+    job = load_job_definition()
+    sql_crit = next(c for c in job.criteria if c.id == "tools.sql")
+    assert any("appearing only in a skills list" in ex for ex in sql_crit.weak_evidence_examples)
+    assert any("Listing several related database technologies does not turn mention-only" in rule for rule in sql_crit.do_not_infer)

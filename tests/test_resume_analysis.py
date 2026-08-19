@@ -253,6 +253,17 @@ def test_prompt_contains_candidate_name_metadata_policy() -> None:
     assert "Do not extract or return email, phone number, address" in instruction
 
 
+def test_prompt_contains_strict_evidence_evaluation_rules() -> None:
+    prompt = build_resume_analysis_prompt(load_job_definition(), create_resume())
+    instruction = prompt.system_instruction
+
+    assert "Do not infer an unmentioned competency" in instruction
+    assert "Score only what the resume evidence itself supports" in instruction
+    assert "classify it as adjacent or none rather than direct" in instruction
+    assert "choose the lower level unless the resume contains explicit support for the higher level" in instruction
+    assert "When deciding between Level 3 and Level 4, use Level 4 only when the resume explicitly demonstrates" in instruction
+
+
 def test_mocked_gemini_response_becomes_typed_analysis() -> None:
     job = load_job_definition()
     resume = create_resume()

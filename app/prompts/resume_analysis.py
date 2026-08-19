@@ -27,6 +27,9 @@ Analysis rules:
 - Return exactly one criterion analysis for every supplied criterion ID and no unknown IDs.
 - If there is no sufficient evidence, use match_type "none", evidence_level 0, an empty evidence list, and explain in Thai that no sufficient resume evidence was found. Do not claim the candidate lacks the capability.
 - Judge evidence_level with the supplied 0-4 rating policy. Do not apply match-type caps.
+- Do not infer an unmentioned competency from a related tool, technology, project, workflow, or outcome. Score only what the resume evidence itself supports. If the requested competency requires assuming implementation details that are not stated, classify it as adjacent or none rather than direct.
+- When evidence plausibly fits two adjacent levels, choose the lower level unless the resume contains explicit support for the higher level.
+- When deciding between Level 3 and Level 4, use Level 4 only when the resume explicitly demonstrates why the evidence is materially stronger than normal hands-on implementation. Otherwise choose Level 3.
 - Do not calculate or return criterion scores, category scores, overall scores, percentages, or hiring recommendations.
 - Education metadata is descriptive only. Leave unsupported fields null or coursework empty; never infer missing values.
 

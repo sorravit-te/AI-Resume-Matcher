@@ -63,49 +63,49 @@
   "rating_scale": [
     {
       "rating": 0,
-      "description": "No sufficient evidence found"
+      "description": "No supporting evidence."
     },
     {
       "rating": 1,
-      "description": "Mention, exposure, or unsupported claim only"
+      "description": "Mention only. The skill/tool/concept appears in a skills list or isolated statement with no demonstrated practical usage."
     },
     {
       "rating": 2,
-      "description": "Basic or limited practical evidence"
+      "description": "Limited practical evidence. The resume shows relevant usage or participation, but implementation depth, ownership, or demonstrated competency is limited or unclear."
     },
     {
       "rating": 3,
-      "description": "Clear hands-on experience"
+      "description": "Clear hands-on evidence. The resume explicitly shows practical implementation or substantial responsibility for the criterion in a project/work context."
     },
     {
       "rating": 4,
-      "description": "Strong evidence through depth, ownership, multiple examples, or measurable outcome; this does not mean senior or expert."
+      "description": "Strong demonstrated evidence. The resume shows clear hands-on implementation PLUS criterion-relevant evidence of substantial depth, complexity, evaluation, or outcome. Do not assign Level 4 merely because the evidence contains numbers, percentages, latency, cost, sample counts, or other metrics; the measurable result must materially demonstrate strength in the criterion being scored."
     }
   ],
   "match_types": [
     {
       "id": "direct",
-      "definition": "Resume evidence directly demonstrates the requested capability or technology, such as containerizing FastAPI services using Docker for the Docker criterion.",
+      "definition": "Resume evidence explicitly demonstrates the requested competency or an unmistakable implementation of it. Direct must not depend on speculative assumptions about unseen implementation details.",
       "max_rating": 4
     },
     {
       "id": "equivalent",
-      "definition": "Different wording or technology clearly demonstrates the same underlying required capability, such as PostgreSQL queries and schemas for SQL.",
+      "definition": "Evidence demonstrates substantially the same underlying competency using a different but genuinely equivalent terminology/implementation. Equivalence must be defensible from the resume evidence itself. Do not use 'equivalent' merely because two concepts belong to the same broad technical domain.",
       "max_rating": 4
     },
     {
       "id": "transferable",
-      "definition": "Experience is functionally similar and meaningfully transferable, but is not the requested technology or capability itself, such as Make.com for n8n.",
+      "definition": "Resume evidence explicitly demonstrates functionally similar and meaningfully transferable experience, but is not the requested technology or capability itself, such as Make.com for n8n. Do not infer transferable experience from unrelated or unsupported claims.",
       "max_rating": 3
     },
     {
       "id": "adjacent",
-      "definition": "Related technology or experience exists but does not sufficiently demonstrate the requested capability, such as Kubernetes for Docker.",
+      "definition": "Evidence demonstrates a related capability, but not the requested competency itself. Requires an inference from a neighboring activity. Adjacent evidence must not be described as direct.",
       "max_rating": 1
     },
     {
       "id": "none",
-      "definition": "No relevant evidence is found.",
+      "definition": "No resume evidence supports the criterion. Related technology/domain alone is insufficient.",
       "max_rating": 0
     }
   ],
@@ -254,15 +254,31 @@
           ],
           "description": "Constructing, selecting, or managing context so an AI application receives useful grounded inputs.",
           "positive_evidence_examples": [
-            "RAG or retrieved context",
+            "RAG implemented with explicit context selection, preparation, or assembly",
             "Document grounding or dynamic context injection",
-            "Conversation-history management or context construction"
+            "Conversation-history management or context construction",
+            "context construction",
+            "context selection",
+            "context injection",
+            "context orchestration",
+            "retrieval/grounding strategy",
+            "RAG context preparation",
+            "context-window/token-budget management",
+            "dynamic context assembly",
+            "conversation/state context management",
+            "another genuinely equivalent implementation"
           ],
           "weak_evidence_examples": [
             "Called a hosted LLM API without context design details"
           ],
           "do_not_infer": [
-            "Gemini or OpenAI API usage alone as Context Engineering"
+            "Gemini or OpenAI API usage alone as Context Engineering",
+            "sending document text/data to an LLM",
+            "OCR followed by LLM processing",
+            "document extraction pipelines",
+            "using Gemini/OpenAI/another LLM on extracted data",
+            "generic preprocessing before an LLM",
+            "merely mentioning RAG/LLMs without showing context-handling work"
           ]
         },
         {
@@ -466,13 +482,17 @@
           "positive_evidence_examples": [
             "Designed or processed JSON payloads",
             "Validated structured data in an application",
-            "Used JSON in an API integration"
+            "Used JSON in an API integration",
+            "Demonstrated creation, transformation, normalization, validation, or manipulation of structured tabular data such as CSV or normalized records is direct evidence of the Structured Data portion of this criterion."
           ],
           "weak_evidence_examples": [
             "Mentioned data formats without use context"
           ],
           "do_not_infer": [
-            "Using an API as automatic proof of JSON handling"
+            "Using an API as automatic proof of JSON handling",
+            "Do not claim explicit JSON experience unless JSON is actually supported by the resume",
+            "Do not classify demonstrated structured-data work as none merely because the format is CSV rather than JSON",
+            "Do not downgrade demonstrated structured-data work to equivalent merely because JSON itself is not mentioned"
           ]
         },
         {
@@ -532,13 +552,16 @@
           "positive_evidence_examples": [
             "Wrote SQL queries",
             "Developed PostgreSQL queries or schemas",
-            "Used SQL for data analysis or application features"
+            "Used SQL for data analysis or application features",
+            "explicit practical evidence such as writing queries, schema/table work, joins/aggregations, or CRUD/data manipulation"
           ],
           "weak_evidence_examples": [
-            "Listed databases without query work"
+            "Listed databases without query work",
+            "SQL or database product names (MySQL, PostgreSQL) appearing only in a skills list without explicit project/work evidence"
           ],
           "do_not_infer": [
-            "NoSQL database usage as SQL experience"
+            "NoSQL database usage as SQL experience",
+            "Listing several related database technologies does not turn mention-only evidence into demonstrated usage"
           ]
         },
         {
