@@ -18,6 +18,7 @@
   "score_name": "JD Match Score",
   "overall_score": 68.25,
   "maximum_score": 100.0,
+  "overall_rationale": "JD Match Score 68.25/100 มาจาก Education 7.5/10, Skills 31.5/40, Knowledge 11.5/25 และ Tools & Technology 17.75/25 โดยพบหลักฐานที่สนับสนุนคะแนนอย่างชัดเจนใน Python Programming, Academic Relevance และ LLM / Generative AI ขณะที่คะแนนถูกจำกัดจากเกณฑ์ที่ยังไม่พบหลักฐานเพียงพอ เช่น Machine Learning Fundamentals และ Cloud Platform รวมถึงบางเกณฑ์ที่มีหลักฐานในระดับจำกัด เช่น Natural Language Processing คะแนนนี้สะท้อนความสอดคล้องของหลักฐานในเรซูเม่กับ JD เท่านั้น ไม่ใช่การตัดสินรับหรือไม่รับเข้าทำงาน",
   "category_scores": [
     {
       "category": "education",

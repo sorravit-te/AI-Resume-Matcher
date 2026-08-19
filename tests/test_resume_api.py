@@ -19,6 +19,7 @@ from app.services.evidence_validation import (
 )
 from app.services.job_definition import load_job_definition
 from app.services.llm_analysis import LlmAnalysisError, LlmErrorCode
+from app.services.overall_rationale import build_overall_rationale
 from app.services.pdf_processing import (
     MAX_RESUME_FILE_BYTES,
     PdfErrorCode,
@@ -46,6 +47,7 @@ def create_result(candidate_name: str | None = None) -> ResumeMatchResult:
         ],
     )
     score = score_resume_analysis(analysis, job)
+    overall_rationale = build_overall_rationale(score, job)
     return ResumeMatchResult(
         candidate_name=analysis.candidate_name,
         job_id=job.job_id,
@@ -55,6 +57,7 @@ def create_result(candidate_name: str | None = None) -> ResumeMatchResult:
         score_name=score.score_name,
         overall_score=score.overall_score,
         maximum_score=score.maximum_score,
+        overall_rationale=overall_rationale,
         category_scores=score.category_scores,
         criterion_scores=score.criterion_scores,
     )
@@ -181,6 +184,7 @@ def test_success_response_contract_excludes_private_pipeline_data(monkeypatch) -
         "score_name",
         "overall_score",
         "maximum_score",
+        "overall_rationale",
         "category_scores",
         "criterion_scores",
     } <= response_fields

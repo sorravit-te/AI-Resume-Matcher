@@ -95,6 +95,12 @@ const overallScoreProgressFill = document.querySelector(
 const categoryScoreContainer = document.querySelector(
   "#category-score-container",
 );
+const overallRationaleSection = document.querySelector(
+  "#overall-rationale-section",
+);
+const overallRationaleText = document.querySelector(
+  "#overall-rationale-text",
+);
 const criterionDetailContainer = document.querySelector(
   "#criterion-detail-container",
 );
@@ -266,6 +272,7 @@ function isUsableResult(result) {
     isNonEmptyString(result.job_title) &&
     isNonEmptyString(result.score_name) &&
     isUsableScore(result.overall_score, result.maximum_score) &&
+    isNonEmptyString(result.overall_rationale) &&
     Array.isArray(result.category_scores) &&
     result.category_scores.length > 0 &&
     result.category_scores.every(
@@ -349,6 +356,8 @@ function clearResultVisualization() {
   overallScoreProgress.removeAttribute("aria-valuenow");
   overallScoreProgress.removeAttribute("aria-valuemax");
   overallScoreProgressFill.style.width = "0%";
+  overallRationaleSection.hidden = true;
+  overallRationaleText.textContent = "";
   categoryScoreContainer.replaceChildren();
   criterionDetailContainer.removeAttribute("aria-labelledby");
   criterionDetailContainer.replaceChildren();
@@ -691,6 +700,10 @@ function renderResult(result) {
   resultJobTitle.textContent = result.job_title;
   resultCompany.textContent = result.company;
   renderOverallScore(result);
+  if (isNonEmptyString(result.overall_rationale)) {
+    overallRationaleText.textContent = result.overall_rationale;
+    overallRationaleSection.hidden = false;
+  }
   selectedResultCategory = defaultResultCategory(result.category_scores);
   renderCategoryScores(result.category_scores);
   renderSelectedCategoryDetail(result);

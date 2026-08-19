@@ -9,6 +9,7 @@ from app.models.resume_match_result import ResumeMatchResult
 from app.services.evidence_validation import validate_resume_evidence
 from app.services.job_definition import load_job_definition
 from app.services.llm_analysis import analyze_resume
+from app.services.overall_rationale import build_overall_rationale
 from app.services.pdf_processing import process_resume_pdf
 from app.services.scoring import score_resume_analysis
 
@@ -30,6 +31,7 @@ def run_resume_matching(
     analysis = analyze_resume(resume, resolved_job, client=llm_client)
     validated_analysis = validate_resume_evidence(analysis, resume)
     score = score_resume_analysis(validated_analysis, resolved_job)
+    overall_rationale = build_overall_rationale(score, resolved_job)
 
     return ResumeMatchResult(
         candidate_name=validated_analysis.candidate_name,
@@ -40,6 +42,7 @@ def run_resume_matching(
         score_name=score.score_name,
         overall_score=score.overall_score,
         maximum_score=score.maximum_score,
+        overall_rationale=overall_rationale,
         category_scores=score.category_scores,
         criterion_scores=score.criterion_scores,
     )

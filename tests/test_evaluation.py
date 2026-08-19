@@ -25,6 +25,7 @@ from app.services.evidence_validation import (
     validate_resume_evidence,
 )
 from app.services.job_definition import load_job_definition
+from app.services.overall_rationale import build_overall_rationale
 from app.services.scoring import score_resume_analysis
 from evals import run_live_eval
 from evals.synthetic_cases import SYNTHETIC_CASES, get_synthetic_case
@@ -420,6 +421,7 @@ def test_match_result_excludes_raw_synthetic_resume_content() -> None:
     resume = get_synthetic_case("unrelated_candidate").to_resume_document()
     analysis = create_analysis(job)
     score = score_resume_analysis(analysis, job)
+    overall_rationale = build_overall_rationale(score, job)
     result = ResumeMatchResult(
         job_id=job.job_id,
         company=job.company,
@@ -428,6 +430,7 @@ def test_match_result_excludes_raw_synthetic_resume_content() -> None:
         score_name=score.score_name,
         overall_score=score.overall_score,
         maximum_score=score.maximum_score,
+        overall_rationale=overall_rationale,
         category_scores=score.category_scores,
         criterion_scores=score.criterion_scores,
     )

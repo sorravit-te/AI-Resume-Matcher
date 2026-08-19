@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import Field
+from typing import Annotated
+
+from pydantic import Field, StringConstraints
 
 from app.models.resume_analysis import CandidateName, EducationMetadata
 from app.models.resume_score import (
@@ -24,5 +26,6 @@ class ResumeMatchResult(ScoreModel):
     score_name: str = Field(min_length=1)
     overall_score: JsonDecimal = Field(ge=0)
     maximum_score: JsonDecimal = Field(gt=0)
+    overall_rationale: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
     category_scores: list[CategoryScore] = Field(min_length=1)
     criterion_scores: list[CriterionScore] = Field(min_length=1)

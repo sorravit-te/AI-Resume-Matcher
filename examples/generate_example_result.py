@@ -12,6 +12,7 @@ from app.models.resume_analysis import (
 )
 from app.models.resume_match_result import ResumeMatchResult
 from app.services.job_definition import load_job_definition
+from app.services.overall_rationale import build_overall_rationale
 from app.services.scoring import score_resume_analysis
 
 def _matched_criterion(
@@ -188,6 +189,7 @@ def build_example_result() -> ResumeMatchResult:
         ],
     )
     score = score_resume_analysis(analysis, job)
+    overall_rationale = build_overall_rationale(score, job)
     return ResumeMatchResult(
         candidate_name=analysis.candidate_name,
         job_id=job.job_id,
@@ -197,6 +199,7 @@ def build_example_result() -> ResumeMatchResult:
         score_name=score.score_name,
         overall_score=score.overall_score,
         maximum_score=score.maximum_score,
+        overall_rationale=overall_rationale,
         category_scores=score.category_scores,
         criterion_scores=score.criterion_scores,
     )

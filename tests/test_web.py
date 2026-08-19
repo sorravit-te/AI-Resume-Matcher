@@ -35,6 +35,9 @@ def test_root_returns_ai_resume_matcher_html() -> None:
     assert 'aria-atomic="false"' in response.text
     assert 'id="download-result"' in response.text
     assert "Download JSON" in response.text
+    assert 'id="overall-rationale-section"' in response.text
+    assert 'id="overall-rationale-text"' in response.text
+    assert "Overall Analysis" in response.text
 
 
 def test_root_referenced_stylesheet_is_available() -> None:
@@ -137,6 +140,9 @@ def test_root_referenced_javascript_is_available() -> None:
     assert "latestResultFilename" in response.text
     assert 'const DEFAULT_RESULT_FILENAME = "resume_match_result.json"' in response.text
     assert "isSafeResultFilename" in response.text
+    assert "overall_rationale" in response.text
+    assert "overallRationaleText" in response.text
+    assert "overallRationaleSection" in response.text
     assert "innerHTML" not in response.text
     assert "outerHTML =" not in response.text
     assert "insertAdjacentHTML" not in response.text

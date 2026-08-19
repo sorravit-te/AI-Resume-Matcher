@@ -22,6 +22,7 @@ from app.services.evidence_validation import (
 from app.services.job_definition import load_job_definition
 from app.services.llm_analysis import LlmAnalysisError, LlmErrorCode
 from app.services.pdf_processing import PdfErrorCode, PdfProcessingError
+from app.services.overall_rationale import build_overall_rationale
 from app.services.scoring import ScoringError, score_resume_analysis
 
 
@@ -56,16 +57,19 @@ def create_analysis(job) -> ResumeAnalysis:
 
 
 def patch_successful_stages(monkeypatch, job, resume, analysis, score):
+    overall_rationale = build_overall_rationale(score, job)
     stages = {
         "pdf": Mock(return_value=resume),
         "analysis": Mock(return_value=analysis),
         "evidence": Mock(return_value=analysis),
         "scoring": Mock(return_value=score),
+        "rationale": Mock(return_value=overall_rationale),
     }
     monkeypatch.setattr(resume_pipeline, "process_resume_pdf", stages["pdf"])
     monkeypatch.setattr(resume_pipeline, "analyze_resume", stages["analysis"])
     monkeypatch.setattr(resume_pipeline, "validate_resume_evidence", stages["evidence"])
     monkeypatch.setattr(resume_pipeline, "score_resume_analysis", stages["scoring"])
+    monkeypatch.setattr(resume_pipeline, "build_overall_rationale", stages["rationale"])
     return stages
 
 
@@ -88,6 +92,8 @@ def test_successful_pipeline_returns_complete_privacy_limited_result(monkeypatch
     assert result.score_name == score.score_name == "JD Match Score"
     assert result.overall_score == score.overall_score
     assert result.maximum_score == score.maximum_score
+    assert isinstance(result.overall_rationale, str)
+    assert len(result.overall_rationale) > 0
     assert result.category_scores == score.category_scores
     assert result.criterion_scores == score.criterion_scores
 
@@ -131,6 +137,7 @@ def test_pipeline_executes_stages_in_exact_order(monkeypatch) -> None:
     resume = create_resume()
     analysis = create_analysis(job)
     score = score_resume_analysis(analysis, job)
+    overall_rationale = build_overall_rationale(score, job)
     calls: list[str] = []
 
     def process_stage(file_bytes, filename):
@@ -149,14 +156,19 @@ def test_pipeline_executes_stages_in_exact_order(monkeypatch) -> None:
         calls.append("score_analysis")
         return score
 
+    def rationale_stage(resume_score, job_definition):
+        calls.append("build_rationale")
+        return overall_rationale
+
     monkeypatch.setattr(resume_pipeline, "process_resume_pdf", process_stage)
     monkeypatch.setattr(resume_pipeline, "analyze_resume", analysis_stage)
     monkeypatch.setattr(resume_pipeline, "validate_resume_evidence", evidence_stage)
     monkeypatch.setattr(resume_pipeline, "score_resume_analysis", scoring_stage)
+    monkeypatch.setattr(resume_pipeline, "build_overall_rationale", rationale_stage)
 
     resume_pipeline.run_resume_matching(b"synthetic", "resume.pdf", job=job)
 
-    assert calls == ["process_pdf", "analyze_resume", "validate_evidence", "score_analysis"]
+    assert calls == ["process_pdf", "analyze_resume", "validate_evidence", "score_analysis", "build_rationale"]
 
 
 def test_invalid_pdf_short_circuits_all_later_stages(monkeypatch) -> None:
@@ -229,8 +241,9 @@ def test_scoring_error_propagates_unchanged(monkeypatch) -> None:
     job = load_job_definition()
     resume = create_resume()
     analysis = create_analysis(job)
+    score = score_resume_analysis(analysis, job)
     scoring_error = ScoringError("Invalid scoring contract.")
-    stages = patch_successful_stages(monkeypatch, job, resume, analysis, Mock())
+    stages = patch_successful_stages(monkeypatch, job, resume, analysis, score)
     stages["scoring"].side_effect = scoring_error
 
     with pytest.raises(ScoringError) as exc_info:
@@ -298,6 +311,7 @@ def test_result_excludes_resume_and_provider_internals(monkeypatch) -> None:
     result_fields = set(ResumeMatchResult.model_fields)
 
     assert "candidate_name" in result_fields
+    assert "overall_rationale" in result_fields
     assert result_fields.isdisjoint(
         {"file_bytes", "full_text", "pages", "api_key", "provider_response", "prompt"}
     )
