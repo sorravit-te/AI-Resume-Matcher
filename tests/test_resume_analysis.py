@@ -282,6 +282,42 @@ def test_mocked_gemini_response_becomes_typed_analysis() -> None:
     assert request["config"].response_json_schema["additionalProperties"] is False
     assert request["config"].tools is None
     assert request["config"].automatic_function_calling.disable is True
+    from google.genai.types import ThinkingLevel
+    assert request["config"].thinking_config.thinking_level == ThinkingLevel.LOW
+
+def test_usage_metadata_is_extracted_into_metrics() -> None:
+    job = load_job_definition()
+    client = Mock()
+    usage = SimpleNamespace(
+        prompt_token_count=100,
+        candidates_token_count=200,
+        thoughts_token_count=50,
+        total_token_count=350,
+    )
+    client.models.generate_content.return_value = SimpleNamespace(
+        parsed=create_valid_analysis_payload(job),
+        usage_metadata=usage,
+    )
+
+    metrics: dict[str, float] = {}
+    analyze_resume(create_resume(), job, client=client, metrics=metrics)
+
+    assert metrics.get("gemini_prompt_tokens") == 100.0
+    assert metrics.get("gemini_output_tokens") == 200.0
+    assert metrics.get("gemini_thought_tokens") == 50.0
+    assert metrics.get("gemini_total_tokens") == 350.0
+
+def test_missing_usage_metadata_is_ignored() -> None:
+    job = load_job_definition()
+    client = Mock()
+    client.models.generate_content.return_value = SimpleNamespace(
+        parsed=create_valid_analysis_payload(job),
+    )
+
+    metrics: dict[str, float] = {}
+    analyze_resume(create_resume(), job, client=client, metrics=metrics)
+
+    assert "gemini_prompt_tokens" not in metrics
 
 
 def test_valid_json_text_response_becomes_typed_analysis() -> None:

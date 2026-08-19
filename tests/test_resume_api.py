@@ -80,7 +80,8 @@ def test_successful_upload_forwards_bytes_and_filename_once(monkeypatch) -> None
     assert response.headers["content-disposition"] == (
         'attachment; filename="resume_match_result.json"'
     )
-    pipeline.assert_called_once_with(file_bytes, "Candidate.Resume.PDF")
+    from unittest.mock import ANY
+    pipeline.assert_called_once_with(file_bytes, "Candidate.Resume.PDF", metrics=ANY)
 
 
 def test_success_filename_uses_sanitized_candidate_name(monkeypatch) -> None:
@@ -334,7 +335,8 @@ def test_exact_maximum_size_upload_reaches_pipeline(monkeypatch) -> None:
     )
 
     assert response.status_code == 200
-    pipeline.assert_called_once_with(file_bytes, "resume.pdf")
+    from unittest.mock import ANY
+    pipeline.assert_called_once_with(file_bytes, "resume.pdf", metrics=ANY)
 
 
 def test_maximum_plus_one_is_rejected_before_pipeline(monkeypatch) -> None:
@@ -376,9 +378,10 @@ def test_pipeline_is_dispatched_through_threadpool(monkeypatch) -> None:
     )
 
     assert response.status_code == 200
-    assert dispatches == [
-        (pipeline, (b"%PDF-threadpool", "resume.pdf"), {}),
-    ]
+    assert len(dispatches) == 1
+    assert dispatches[0][0] == pipeline
+    assert dispatches[0][1] == (b"%PDF-threadpool", "resume.pdf")
+    assert set(dispatches[0][2].keys()) == {"metrics"}
 
 
 class TrackedUpload:

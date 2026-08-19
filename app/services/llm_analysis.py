@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from enum import StrEnum
 from typing import Any
 
@@ -43,10 +44,15 @@ def analyze_resume(
     job: JobDefinition,
     *,
     client: genai.Client | None = None,
+    metrics: dict[str, float] | None = None,
 ) -> ResumeAnalysis:
     """Request structured evidence analysis and validate it against local inputs."""
 
+    t0 = time.perf_counter()
     prompt = build_resume_analysis_prompt(job, resume)
+    if metrics is not None:
+        metrics["prompt_build_ms"] = (time.perf_counter() - t0) * 1000
+
     owned_client = client is None
 
     if client is None:
@@ -58,12 +64,28 @@ def analyze_resume(
             )
         client = genai.Client(api_key=api_key)
 
+    t1 = time.perf_counter()
     try:
         response = _request_structured_analysis(client, prompt)
+
+        if metrics is not None:
+            usage = getattr(response, "usage_metadata", None)
+            if usage:
+                if (p := getattr(usage, "prompt_token_count", None)) is not None:
+                    metrics["gemini_prompt_tokens"] = float(p)
+                if (c := getattr(usage, "candidates_token_count", None)) is not None:
+                    metrics["gemini_output_tokens"] = float(c)
+                if (t := getattr(usage, "thoughts_token_count", None)) is not None:
+                    metrics["gemini_thought_tokens"] = float(t)
+                if (tt := getattr(usage, "total_token_count", None)) is not None:
+                    metrics["gemini_total_tokens"] = float(tt)
     finally:
+        if metrics is not None:
+            metrics["gemini_request_ms"] = (time.perf_counter() - t1) * 1000
         if owned_client:
             client.close()
 
+    t2 = time.perf_counter()
     try:
         analysis = _parse_structured_response(response)
         return validate_resume_analysis(analysis, job, resume)
@@ -72,6 +94,9 @@ def analyze_resume(
             LlmErrorCode.LLM_INVALID_RESPONSE,
             "Gemini returned a response that does not match the analysis contract.",
         ) from exc
+    finally:
+        if metrics is not None:
+            metrics["gemini_parsing_validation_ms"] = (time.perf_counter() - t2) * 1000
 
 
 def _request_structured_analysis(
@@ -90,6 +115,9 @@ def _request_structured_analysis(
                 response_json_schema=ResumeAnalysis.model_json_schema(),
                 automatic_function_calling=types.AutomaticFunctionCallingConfig(
                     disable=True
+                ),
+                thinking_config=types.ThinkingConfig(
+                    thinking_level="low"
                 ),
             ),
         )

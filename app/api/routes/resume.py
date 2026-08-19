@@ -1,6 +1,8 @@
 """HTTP boundary for the in-memory resume matching pipeline."""
 
+import logging
 import re
+import time
 from typing import Annotated
 
 from fastapi import APIRouter, File, Response, UploadFile
@@ -14,6 +16,8 @@ from app.services.pdf_processing import (
     PdfProcessingError,
 )
 from app.services.resume_pipeline import run_resume_matching
+
+logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/api/v1", tags=["resume matching"])
 _UPLOAD_READ_CHUNK_BYTES = 64 * 1024
@@ -50,13 +54,19 @@ async def match_resume(
     resume: Annotated[UploadFile, File(description="Text-based PDF resume")],
 ) -> ResumeMatchResult:
     """Read a bounded upload and run the synchronous pipeline off the event loop."""
+    start_total = time.perf_counter()
+    metrics: dict[str, float] = {}
 
     try:
+        t0 = time.perf_counter()
         file_bytes = await _read_upload_bounded(resume)
+        metrics["upload_read_ms"] = (time.perf_counter() - t0) * 1000
+
         result = await run_in_threadpool(
             run_resume_matching,
             file_bytes,
             resume.filename,
+            metrics=metrics,
         )
         response.headers["Cache-Control"] = "no-store"
         response.headers["Content-Disposition"] = (
@@ -65,6 +75,9 @@ async def match_resume(
         return result
     finally:
         await resume.close()
+        metrics["total_ms"] = (time.perf_counter() - start_total) * 1000
+        log_parts = [f"{k}={v:.2f}" for k, v in metrics.items()]
+        logger.info("resume_match_performance: %s", " ".join(log_parts))
 
 
 def _result_filename(candidate_name: str | None) -> str:

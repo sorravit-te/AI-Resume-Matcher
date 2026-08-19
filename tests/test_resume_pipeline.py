@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from unittest.mock import Mock
+from typing import Any
+from unittest.mock import Mock, ANY
 
 import pytest
 
@@ -123,6 +124,8 @@ def test_scoring_and_result_use_the_validated_analysis_object(monkeypatch) -> No
 
     result = resume_pipeline.run_resume_matching(b"synthetic", "resume.pdf", job=job)
 
+    stages["analysis"].assert_called_once_with(resume, job, client=None, metrics=ANY)
+    stages["evidence"].assert_called_once_with(original_analysis, resume)
     stages["scoring"].assert_called_once_with(validated_analysis, job)
     assert stages["scoring"].call_args.args[0] is validated_analysis
     assert stages["scoring"].call_args.args[0] is not original_analysis
@@ -144,7 +147,7 @@ def test_pipeline_executes_stages_in_exact_order(monkeypatch) -> None:
         calls.append("process_pdf")
         return resume
 
-    def analysis_stage(resume_document, job_definition, *, client):
+    def analysis_stage(resume_document, job_definition, *, client=None, metrics=None):
         calls.append("analyze_resume")
         return analysis
 
@@ -297,7 +300,8 @@ def test_injected_llm_client_is_passed_to_analysis_service(monkeypatch) -> None:
         llm_client=llm_client,
     )
 
-    stages["analysis"].assert_called_once_with(resume, job, client=llm_client)
+    from unittest.mock import ANY
+    stages["analysis"].assert_called_once_with(resume, job, client=llm_client, metrics=ANY)
 
 
 def test_result_excludes_resume_and_provider_internals(monkeypatch) -> None:
