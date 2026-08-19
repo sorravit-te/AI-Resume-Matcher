@@ -22,7 +22,6 @@ def test_root_returns_ai_resume_matcher_html() -> None:
     assert 'type="file"' in response.text
     assert 'accept="application/pdf,.pdf"' in response.text
     assert 'id="upload-panel" aria-busy="false"' in response.text
-    assert 'id="analyze-spinner"' in response.text
     assert 'id="result-section"' in response.text
     assert 'id="overall-score-progress"' in response.text
     assert 'id="category-score-container"' in response.text
@@ -88,6 +87,9 @@ def test_root_referenced_javascript_is_available() -> None:
     assert 'setAttribute("aria-busy", String(analyzing))' in response.text
     assert 'analyzing ? "Analyzing..." : "Analyze Resume"' in response.text
     assert 'headers.get("Content-Disposition")' in response.text
+    assert 'setStatus("This may take around 15–30 seconds")' in response.text
+    assert 'analyzeButton.disabled = analyzing || !selectedFile' in response.text
+    assert 'if (isAnalyzing || !selectedFile)' in response.text
     assert "function renderResult(result)" in response.text
     assert "let selectedResultCategory = null;" in response.text
     assert 'const DEFAULT_RESULT_CATEGORY = "education"' in response.text

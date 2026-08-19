@@ -79,7 +79,6 @@ const removeButton = document.querySelector("#remove-file");
 const statusMessage = document.querySelector("#upload-status");
 const analyzeButton = document.querySelector("#analyze-button");
 const analyzeButtonLabel = document.querySelector("#analyze-button-label");
-const analyzeSpinner = document.querySelector("#analyze-spinner");
 const resultSection = document.querySelector("#result-section");
 const downloadButton = document.querySelector("#download-result");
 const resultTitle = document.querySelector("#result-title");
@@ -153,11 +152,11 @@ function setAnalyzingState(analyzing) {
   analyzeButton.disabled = analyzing || !selectedFile;
   analyzeButton.classList.toggle("is-loading", analyzing);
   analyzeButtonLabel.textContent = analyzing ? "Analyzing..." : "Analyze Resume";
-  analyzeSpinner.hidden = !analyzing;
 
   if (analyzing) {
     dragDepth = 0;
     dropZone.classList.remove("is-dragging");
+    resultSection.hidden = true;
   }
 }
 
@@ -781,7 +780,7 @@ async function analyzeSelectedResume() {
   formData.append("resume", selectedFile, selectedFile.name);
 
   setAnalyzingState(true);
-  setStatus("Analyzing resume. This may take a moment.");
+  setStatus("This may take around 15–30 seconds");
 
   try {
     let response;

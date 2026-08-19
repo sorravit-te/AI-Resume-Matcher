@@ -400,24 +400,6 @@ h1 {
   box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
 }
 
-.button-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: var(--surface);
-  border-radius: 50%;
-  animation: button-spinner-rotation 750ms linear infinite;
-}
-
-.button-spinner[hidden] {
-  display: none;
-}
-
-@keyframes button-spinner-rotation {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 .result-section {
   overflow: hidden;
@@ -1200,7 +1182,6 @@ h1 {
   .upload-illustration,
   .analyze-button,
   .status-message,
-  .button-spinner,
   .file-summary:not([hidden]),
   .result-section:not([hidden]),
   .score-progress > span,
