@@ -1,69 +1,77 @@
 # AI Resume Matcher
 
-> Evidence-based multilingual Resume-to-JD matching API with LLM-powered semantic analysis and deterministic Python scoring.
+> Evidence-based Resume-to-Job Description (JD) analysis for the EDVISORY tech AI & Data Solution Intern assignment.
 
 ![Python](https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=FFDD54)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-087F73?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Gemini-FFFFFF?style=for-the-badge&logo=googlegemini&logoColor=6C7FF2)
-![PyMuPDF](https://img.shields.io/badge/PyMuPDF-5C4EE5?style=for-the-badge)
-![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
-![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=FFD43B)
+![PyMuPDF](https://img.shields.io/badge/PyMuPDF-4338A8?style=for-the-badge&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-A4134C?style=for-the-badge&logo=pydantic&logoColor=white)
+![Pytest](https://img.shields.io/badge/Pytest-0B6385?style=for-the-badge&logo=pytest&logoColor=FFD43B)
 
 > [!IMPORTANT]
-> The JD Match Score is a decision-support signal, not a hiring probability,
-> candidate-quality score, predicted job performance, or automatic hire/reject
-> decision.
+> **JD Match Score** is decision support based on evidence alignment with a
+> fixed Job Description (JD) and rubric. It is not a hiring probability, candidate
+> quality score, performance prediction, or automatic hire/reject decision.
 
 ## Overview
 
-AI Resume Matcher is assignment that analyzes one PDF resume
-against the EDVISORY AI & Data Solution Intern job definition. It supports
-Thai, English, and mixed-language resume text and produces an explainable JD
-Match Score for human decision support.
+AI Resume Matcher accepts a PDF resume, extracts its text, and compares it
+with the authoritative EDVISORY AI & Data Solution Intern Job Description (JD). A
+configured Gemini model performs structured semantic analysis; Python then
+verifies the evidence and calculates the score deterministically. The result
+is available through a JSON API and a browser-based Web UI.
 
-## Key features
+It supports English, Thai, and mixed Thai/English resume content
+and produces explainable criterion-level analysis for human review.
 
-- PDF resume upload through FastAPI and Swagger/OpenAPI
-- Thai, English, and mixed-language semantic matching
-- Strict, structured Gemini analysis
-- Exact resume evidence quotations with page-aware provenance
-- Deterministic Python scoring
-- `direct`, `equivalent`, `transferable`, `adjacent`, and `none` matching
-- Descriptive candidate-name metadata excluded from scoring
-- Structured public API errors and bounded upload handling
+## Key capabilities
+
+- PDF upload and page-aware text extraction
+- Structured Gemini semantic analysis
+- Exact resume evidence with page and source provenance
+- Deterministic evidence validation and Python scoring
+- Direct, equivalent, transferable, adjacent, and none match types
+- Candidate name as descriptive metadata only; it does not affect scoring
+- Bounded uploads and structured API errors
+- Browser Web UI with category navigation and JSON download
 - Deterministic automated tests
-- Opt-in live synthetic Gemini evaluation
 
-## 🛠 Tech Stack
+## Tech stack
 
 | Layer | Technology | Responsibility |
 |---|---|---|
 | Language | Python 3.12+ | Application logic and deterministic scoring |
-| API | FastAPI + Uvicorn | Resume upload API and Swagger/OpenAPI interface |
-| PDF processing | PyMuPDF | Page-aware PDF validation and text extraction |
+| API | FastAPI + Uvicorn | HTTP API, Web UI hosting, and Swagger/OpenAPI |
+| PDF processing | PyMuPDF | PDF validation and page-aware text extraction |
 | LLM | Gemini 3.6 Flash | Multilingual semantic resume analysis |
 | LLM integration | Google Gen AI SDK | Structured Gemini API communication |
-| Validation | Pydantic | Strict analysis, configuration, and response contracts |
-| Testing | Pytest | Deterministic automated testing |
+| Validation | Pydantic and pydantic-settings | Strict data and configuration contracts |
+| Testing | Pytest and HTTPX | Deterministic application-contract tests |
 
-## ⚙️ How It Works
+## Web UI
 
-1. FastAPI receives one PDF through `POST /api/v1/resume-match`.
-2. The API reads the upload within a fixed bound and validates the PDF.
-3. PyMuPDF extracts and preserves resume text page by page.
-4. Gemini 3.6 Flash compares the resume with the authoritative EDVISORY job
-   definition.
-5. Gemini returns a structured `ResumeAnalysis` containing candidate-name and
-   education metadata plus each criterion's `match_type`, `evidence_level`,
-   exact evidence quote, page number, source type, and Thai rationale.
-6. Python validates the structure and criterion coverage, verifies every quote
-   on its claimed page, applies match caps and rubric weights, and calculates
-   effective ratings plus criterion, category, and overall scores.
-7. FastAPI returns `ResumeMatchResult` JSON with a sanitized download filename.
+Open the interface at `GET /`:
 
-**Gemini does not calculate the final JD Match Score.**
+1. Upload or drag and drop a PDF resume.
+2. Click **Analyze Resume**.
+3. The backend runs the resume-matching pipeline.
+4. The result shows the candidate name when available, job and company, and
+   the overall JD Match Score with a deterministic overall score rationale.
+5. Four category cards show **Education**, **Skills**, **Knowledge**, and
+   **Tools**; Education is selected by default.
+6. Select another category to show only that category's criterion details.
+7. Criterion accordions expose the score, match type, evidence level,
+   effective rating, exact resume evidence, page/source, and Thai rationale.
+8. Click **Download JSON** to download the current structured result.
 
-## 🔄 Workflow
+Category switching is client-side. It does not trigger another analysis or
+Gemini request. The current result is held only in browser memory: refreshing
+or closing and reopening the page clears the displayed result. Refreshing does
+not start a new request; a new Gemini request occurs only when a resume is
+submitted for analysis again.
+
+## Pipeline and Architecture
 
 ```mermaid
 flowchart LR
@@ -71,7 +79,7 @@ flowchart LR
     B --> C[PyMuPDF<br/>Page-aware Extraction]
 
     C --> D[Gemini 3.6 Flash<br/>Semantic Analysis]
-    J[EDVISORY<br/>Job Definition] --> D
+    J[EDVISORY<br/>Job Description & Rubric] --> D
 
     D --> E[Structured<br/>ResumeAnalysis]
     E --> F[Evidence<br/>Validation]
@@ -80,125 +88,83 @@ flowchart LR
     J --> G
 
     G --> H[ResumeMatchResult<br/>JSON]
+    H --> I[API Response<br/>Web UI / JSON Download]
 ```
 
-For the complete request, validation, scoring, output, and typed-error flow,
+Gemini is responsible for semantic interpretation of Thai, English, and
+mixed-language resume content, match-type classification, evidence level,
+exact evidence selection, rationale, and explicitly stated candidate metadata.
+
+Python is responsible for PDF validation and extraction, schema and
+criterion-completeness checks, evidence quote/page verification, match caps,
+effective ratings, criterion/category/overall scoring, deterministic overall
+score rationale, API and error handling, and safe result filenames.
+
+**Gemini does not calculate the final JD Match Score or make a hiring
+decision.** Python scoring is deterministic for the same validated structured
+analysis. However, separate Gemini analysis requests may produce slightly
+different semantic classifications or evidence levels.
+
+For the complete request, validation, scoring, output, and error-handling flow,
 see [docs/WORKFLOW.md](docs/WORKFLOW.md).
-
-## Key Design Decisions
-
-| Decision | Why |
-|---|---|
-| Gemini handles semantics, not scoring | Keeps score arithmetic out of a probabilistic model |
-| Python owns scoring | Makes calculations deterministic and auditable for a given structured analysis |
-| Exact evidence verification | Prevents unsupported or invented LLM evidence from reaching scoring |
-| Page-aware provenance | Makes every scored evidence item traceable to its resume page |
-| Match-type caps | Prevents transferable and adjacent evidence from receiving direct-match credit |
-| Resume treated as untrusted input | Prevents resume text from redefining trusted application instructions |
-| Candidate name excluded from scoring | Keeps identity metadata out of JD alignment calculations |
-| Human-owned final decision | Supports reviewer judgment instead of automating hiring decisions |
-
-## Architecture and responsibility boundaries
-
-| Gemini semantic layer | Python enforcement layer |
-|---|---|
-| Interprets multilingual resume meaning | Handles bounded uploads and validates PDFs |
-| Matches evidence to criteria | Extracts page-aware PDF text |
-| Assigns `match_type` and `evidence_level` | Validates strict schemas and criterion completeness |
-| Selects exact evidence and attributes its page | Verifies exact evidence on the claimed page |
-| Produces a neutral Thai rationale | Applies match caps, effective ratings, and rubric weights |
-| Extracts an explicitly stated candidate name | Calculates criterion, category, and overall scores |
-| Does not calculate scores, apply rubric arithmetic, or make hire/reject decisions | Enforces API result and error contracts |
-
-In short: **LLM = semantic interpretation; Python = deterministic
-enforcement.** Python scoring is deterministic for a given `ResumeAnalysis`.
-Because semantic assessment uses an LLM, `match_type` and `evidence_level` may
-show limited run-to-run variation for the same resume.
-
-## Scoring
-
-The JD Match Score ranges from 0 to 100:
-
-```text
-effective_rating = min(evidence_level, match_cap)
-
-criterion_score =
-    criterion_weight * effective_rating / 4
-```
-
-Evidence levels:
-
-- `0` — no sufficient evidence
-- `1` — mention or exposure
-- `2` — limited practical evidence
-- `3` — clear hands-on evidence
-- `4` — strong depth, ownership, or outcomes
-
-| Match Type | Cap |
-|---|---:|
-| `direct` | 4 |
-| `equivalent` | 4 |
-| `transferable` | 3 |
-| `adjacent` | 1 |
-| `none` | 0 |
-
-The [EDVISORY job definition](data/jobs/edvisory_ai_data_solution_intern.json)
-is the authoritative machine-readable JD, rubric, weights, rating policy, match
-policy, and evidence policy.
 
 ## Quick start
 
 Python 3.12 or newer is required.
 
-```bash
-python -m venv .venv
-```
-
-Windows PowerShell:
+### Windows PowerShell
 
 ```powershell
-.venv\Scripts\Activate.ps1
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
 Copy-Item .env.example .env
 ```
 
-macOS/Linux:
+### macOS / Linux
 
 ```bash
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
 cp .env.example .env
 ```
 
-Set the Gemini configuration in the local `.env` file:
+Edit `.env` and set the server-side API key:
 
 ```dotenv
 GEMINI_API_KEY=<your key>
 GEMINI_MODEL=gemini-3.6-flash
 ```
-
-Never commit `.env` or a real API key.
-
-Start the application:
+Run the application:
 
 ```bash
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
 ```
 
+Then open:
+
+- Web UI: <http://127.0.0.1:8000/>
 - Swagger UI: <http://127.0.0.1:8000/docs>
 - Health check: <http://127.0.0.1:8000/health>
-- Endpoint: `POST /api/v1/resume-match`
 
-Try it with Swagger:
+## API Reference
 
-1. Open `http://127.0.0.1:8000/docs`
-2. Expand `POST /api/v1/resume-match`
-3. Click **Try it out**
-4. Upload a PDF in the `resume` field
-5. Click **Execute**
-6. Review the JD Match Score, evidence, and rationale
+### Endpoints
 
-Or call the API directly:
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Browser-based Web UI |
+| `GET` | `/health` | Application health check |
+| `POST` | `/api/v1/resume-match` | Analyze one PDF resume against the fixed JD and rubric |
+| `GET` | `/docs` | Swagger/OpenAPI documentation |
+
+### Resume analysis
+
+`POST /api/v1/resume-match`
+
+It accepts one text-based PDF in the multipart field `resume` and returns a
+structured `ResumeMatchResult` JSON document.
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/v1/resume-match \
@@ -207,129 +173,149 @@ curl -X POST http://127.0.0.1:8000/api/v1/resume-match \
 
 Uploads are limited to 10 MiB and 10 pages.
 
-## API response
+Swagger/OpenAPI documentation remains available at /docs. Successful and
+centrally mapped application-error responses use Cache-Control: no-store.
+Successful responses remain application/json and include a safe
+Content-Disposition filename based only on the sanitized candidate name, or
+resume_match_result.json when no name is available. The server does not
+persist the downloaded result.
 
-Short representative response:
+## Scoring rubric
 
-```json
-{
-  "candidate_name": "Synthetic Candidate",
-  "job_id": "edvisory_ai_data_solution_intern",
-  "company": "EDVISORY",
-  "job_title": "AI & Data Solution Intern",
-  "score_name": "JD Match Score",
-  "overall_score": 68.25,
-  "maximum_score": 100,
-  "category_scores": [...],
-  "criterion_scores": [...]
-}
-```
+The JD Match Score is on a 0–100 scale with these fixed category totals:
 
-`candidate_name` is descriptive metadata only and is excluded from scoring.
-See the [full synthetic production-shaped example](examples/example_result.json).
+| Category | Maximum |
+|---|---:|
+| Education | 10 |
+| Skills | 40 |
+| Knowledge | 25 |
+| Tools | 25 |
 
-A successful response remains `application/json` and uses
-`Cache-Control: no-store`. Its `Content-Disposition` filename is based only on
-the sanitized candidate name, for example
-`Synthetic_Candidate_resume_match.json`, or falls back to
-`resume_match_result.json`. The server does not persist this file.
+Evidence levels range from 0–4:
+
+- 0: no sufficient evidence
+- 1: mention or exposure
+- 2: limited practical evidence
+- 3: clear hands-on evidence
+- 4: strong depth, ownership, or outcomes
+
+The effective rating and criterion score are:
+
+~~~text
+effective_rating = min(evidence_level, match_cap)
+criterion_score = criterion_weight * effective_rating / 4
+~~~
+
+| Match type | Maximum rating |
+|---|---:|
+| direct | 4 |
+| equivalent | 4 |
+| transferable | 3 |
+| adjacent | 1 |
+| none | 0 |
+
+The machine-readable [EDVISORY JD configuration](data/jobs/edvisory_ai_data_solution_intern.json)
+is the source of truth for criterion definitions, weights, rating policy,
+match caps, and validation targets.
 
 ## Evidence and explainability
 
-Every non-`none` criterion includes one or more evidence objects with an exact,
-verbatim resume quotation, its one-based page number, and its source type.
+Every scored criterion is tied to evidence containing:
 
-```text
-evidence
-= exact text copied from the resume
+- an exact contiguous quote copied from the resume
+- the one-based PDF page
+- the source type
+- a neutral Thai rationale explaining the relationship to the criterion
 
-rationale
-= Thai explanation of why that evidence relates to the criterion
-```
+Before scoring, the backend verifies that each cited quote exists on its
+claimed page after the project's PDF normalization rules. Evidence text is
+not translated, paraphrased, reconstructed, invented, or combined from
+multiple pages. If no exact supporting excerpt exists, the criterion uses
+`match_type = none`, `evidence_level = 0`, and an empty evidence list.
 
-Before scoring, Python verifies that the normalized exact quotation exists on
-the claimed page. The LLM is instructed not to translate, paraphrase,
-reconstruct, invent, or combine unrelated fragments into one evidence quote. If
-no exact supporting excerpt exists, the criterion must use `none`, evidence
-level `0`, and an empty evidence list.
-
-Absence of evidence is not evidence of inability.
-
-## Testing and evaluation
-
-Deterministic validation:
-
-```powershell
-python -m pytest --basetemp ..\pytest-temp-ai-resume -p no:cacheprovider
-python -m pip check
-```
-
-The Pytest suite is deterministic, sends no Gemini requests, consumes no API
-quota, and validates application contracts and scoring behavior.
-
-Opt-in live synthetic evaluation:
-
-```powershell
-python -m evals.run_live_eval
-```
-
-The live evaluator uses the Gemini API, consumes quota, and tests semantic
-behavior with synthetic strong direct, weak keyword-only, equivalent,
-transferable, adjacent, Thai, mixed-language, missing-information,
-prompt-injection, page/evidence-provenance, and unrelated-candidate scenarios.
-Its semantic results may show limited run-to-run variation.
+Absence of evidence does not prove that a candidate lacks the skill.
 
 ## Security and privacy
 
-- Resume content is treated as untrusted input; embedded resume instructions
-  are not trusted application commands.
-- PDF processing uses in-memory bytes and page text; the application creates no
-  persistent resume files and has no application-managed resume database.
-- Full resume pages and full text are not intentionally returned.
-- `.env` is ignored by Git, and the Gemini API key must remain local.
-- Candidate name is the only intentional candidate identity metadata in output
-  and never affects scoring.
-- Email, phone, address, age, gender, nationality, and photo metadata are not
-  extracted into output.
-- Output filenames are sanitized and cannot create paths.
-- Successful and centrally mapped application-error responses use
-  `Cache-Control: no-store`.
+- Uploaded resume content is treated as untrusted data, not as application
+  instructions.
+- The API key is server-side only; it is not exposed to the Web UI.
+- The frontend renders result data with safe DOM APIs rather than unsafe HTML
+  injection.
+- PDF upload size and page count are bounded, and processing is in memory.
+- Result filenames are sanitized and cannot create directories or path
+  traversal.
+- The application does not use localStorage, sessionStorage, or IndexedDB for
+  result persistence.
+- Successful and centrally mapped error responses use Cache-Control: no-store
+  where implemented.
+- Relevant resume content is sent to the configured Gemini provider for
+  analysis; this project does not claim that resumes remain entirely on the
+  local machine.
 
 ## Current limitations
 
-- Text-based PDFs only; no OCR for scanned or image-only resumes
-- One resume per request; no batch candidate ranking
-- Fixed EDVISORY job definition for this assignment
-- Gemini API/network, quota, and configured-model availability dependencies
-- Possible semantic run-to-run variation
-- No authentication, application database, rate limiting, production
-  deployment, or frontend
-- Human decision-support only; not an autonomous hiring system
+- Text-based PDFs only; scanned or image-only resumes have no OCR support.
+- One resume per request; no batch processing or candidate ranking.
+- The EDVISORY Job Description (JD) and scoring rubric are fixed for this assignment.
+- No authentication, user accounts, database, history, or production
+  deployment is included.
+- Web UI results are memory-only and disappear on refresh or page close.
+- No RAG or LangChain integration is included.
+- A new Gemini request may vary in semantic analysis, so repeated submissions
+  of the same resume are not guaranteed to produce identical final scores.
+- Gemini requires a configured API key, network access, available quota, and a
+  supported configured model.
+
+## Example result
+
+[examples/example_result.json](examples/example_result.json) is a synthetic
+production-shaped result generated without Gemini. It is not a real candidate
+record and contains no real resume or personal information. The deterministic
+generator is [examples/generate_example_result.py](examples/generate_example_result.py).
+
+## Testing and evaluation
+
+Run the deterministic suite from the repository root:
+
+~~~powershell
+.\.venv\Scripts\python.exe -m pytest --basetemp ..\pytest-temp-ai-resume -p no:cacheprovider
+.\.venv\Scripts\python.exe -m pip check
+~~~
+
+The suite covers PDF validation, strict schemas, evidence validation, scoring,
+pipeline object flow, API and error behavior, and Web UI/static contracts. It
+makes no Gemini request and is not browser end-to-end automation.
+
+An opt-in live synthetic evaluator exists at `python -m evals.run_live_eval`,
+but it calls Gemini, consumes quota, and is not part of the normal
+deterministic test run.
 
 ## Repository structure
 
-```text
+~~~text
 app/
-  api/       HTTP routes and error handlers
-  core/      application configuration
-  models/    strict data contracts
-  prompts/   trusted Gemini prompt construction
-  services/  PDF, analysis, validation, scoring, and pipeline
+  api/                  HTTP routes and error handlers
+  core/                 application configuration
+  models/               strict data contracts
+  prompts/              trusted Gemini prompt construction
+  services/             PDF, analysis, validation, scoring, and pipeline
+  web/
+    index.html          Web UI markup
+    styles.css          Web UI styling
+    app.js              Web UI behavior
 data/
-  jobs/      authoritative EDVISORY job definition
-docs/        detailed workflow documentation
-evals/       opt-in synthetic live evaluation
-examples/    synthetic result and deterministic generator
-tests/       automated deterministic tests
-```
+  jobs/                 authoritative EDVISORY JD and rubric
+docs/                   workflow documentation
+evals/                  opt-in synthetic live evaluation
+examples/               synthetic result and generator
+tests/                  deterministic automated tests
+~~~
 
-## Workflow and deliverables
+## Project references
 
-- [Detailed workflow](docs/WORKFLOW.md) — Mermaid request, validation, scoring,
-  output, and typed-error flow
-- [Example result](examples/example_result.json) — synthetic demonstration, not
-  a real applicant
-- [Example generator](examples/generate_example_result.py) — deterministic
-  generation through production models and scoring without Gemini
-- [Job definition](data/jobs/edvisory_ai_data_solution_intern.json) —
-  authoritative assignment JD and rubric configuration
+- [Detailed workflow](docs/WORKFLOW.md) — request, validation, scoring, output,
+  and error-handling flow
+- [Synthetic example result](examples/example_result.json)
+- [Example generator](examples/generate_example_result.py)
+- [Authoritative JD configuration](data/jobs/edvisory_ai_data_solution_intern.json)

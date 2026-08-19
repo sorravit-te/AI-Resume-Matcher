@@ -27,11 +27,13 @@ flowchart LR
     subgraph Trust[Deterministic trust layer]
         Evidence[Exact normalized quote<br/>and page validation]
         Score[Python scoring<br/>match cap / effective rating<br/>criterion weight]
+        Rationale[Overall score rationale<br/>deterministic Thai explanation]
         Evidence --> Score
+        Score --> Rationale
     end
 
     subgraph Output[API output]
-        Result[ResumeMatchResult<br/>candidate name / JD Match Score]
+        Result[ResumeMatchResult<br/>candidate name / JD Match Score<br/>overall rationale]
         Success[JSON response with safe filename<br/>Cache-Control: no-store]
         Result --> Success
     end
@@ -41,7 +43,7 @@ flowchart LR
     Job --> Gemini
     Analysis --> Evidence
     Job --> Score
-    Score --> Result
+    Rationale --> Result
 
     Reader -. upload limit .-> PDFErrors[Upload / PDF errors<br/>EMPTY_FILE / FILE_TOO_LARGE<br/>INVALID_FILE_EXTENSION / INVALID_PDF<br/>PDF_ENCRYPTED / PAGE_LIMIT_EXCEEDED<br/>NO_EXTRACTABLE_TEXT]
     PDF -. validation failure .-> PDFErrors
